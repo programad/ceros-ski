@@ -33,8 +33,7 @@ const config = {
 
     plugins: [
         new htmlWebpackPlugin({
-            title: 'Ceros Ski',
-            template: 'src/index.html'
+            title: 'Ceros Ski'
         }),
         new CopyPlugin([
             {

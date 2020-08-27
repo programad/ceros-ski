@@ -8,9 +8,9 @@ import { Rect } from './Utils';
 export class Game {
     gameWindow = null;
 
-    constructor() {
+    constructor(canvas) {
         this.assetManager = new AssetManager();
-        this.canvas = new Canvas(Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
+        this.canvas = canvas || new Canvas(Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
         this.skier = new Skier(0, 0);
         this.obstacleManager = new ObstacleManager();
 
@@ -61,7 +61,7 @@ export class Game {
     }
 
     handleKeyDown(event) {
-        switch(event.which) {
+        switch (event.which) {
             case Constants.KEYS.LEFT:
                 this.skier.turnLeft();
                 event.preventDefault();
