@@ -2,35 +2,41 @@ import { gameManager } from '../Core/GameManager';
 
 export class AnimationController {
     playing = false;
+    loop = false;
     animationFrames = [];
-    longAnimationFrameDuration = 8;
-    shortAnimationFrameDuration = 24;
+    animationFrameDuration = 8;
 
-    constructor() {
-        gameManager.resetTimer();
+    constructor(name) {
+        this.lastFrame = gameManager.getCurrentFrame();
+        this.name = name;
     }
 
     update() {
-        if (this.animationFrames.length > 0 && gameManager.getTimer() >= this.animationInterval) {
-            gameManager.resetTimer();
+        let currentFrame = gameManager.getCurrentFrame();
+        if (currentFrame > this.lastFrame) {
+            this.lastFrame = currentFrame;
             this.currentFrameIndex++;
 
-            if (this.currentFrameIndex >= this.animationFrames.length) {
-                this.currentFrameIndex = this.animationFrames.length - 1;
-                this.currentFrame = this.animationFrames[this.currentFrameIndex];
-                this.playing = false;
+            if (this.loop) {
+                this.currentFrameIndex = (this.currentFrameIndex % this.animationFrames.length + this.animationFrames.length) % this.animationFrames.length;
             } else {
-                this.currentFrame = this.animationFrames[this.currentFrameIndex];
+                if (this.currentFrameIndex >= this.animationFrames.length) {
+                    this.currentFrameIndex = this.animationFrames.length - 1;
+                    this.playing = false;
+                }
             }
+
+            this.currentFrame = this.animationFrames[this.currentFrameIndex];
         }
     }
 
-    play(assets) {
+    play(assets, loop) {
         if (assets) {
+            this.loop = loop ? loop : false;
             this.playing = true;
             this.animationFrames = assets;
             this.currentFrameIndex = 0;
-            this.animationInterval = this.animationFrames.length > 1 ? this.longAnimationFrameDuration : this.shortAnimationFrameDuration;
+            this.animationInterval = this.animationFrameDuration;
 
             this.currentFrame = this.animationFrames[this.currentFrameIndex];
         }

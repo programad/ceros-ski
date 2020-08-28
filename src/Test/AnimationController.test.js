@@ -6,9 +6,10 @@ import { gameManager } from '../Core/GameManager';
 let animationController;
 
 const singleFrameAnimation = [Constants.SKIER_JUMP_START],
-    longAnimation = [Constants.SKIER_JUMP_START, Constants.SKIER_JUMP_CLIMAX, Constants.SKIER_JUMP_ROLL, Constants.SKIER_JUMP_ALMOST, Constants.SKIER_JUMP_LANDING];
+    longAnimation = [Constants.SKIER_JUMP_START, Constants.SKIER_JUMP_CLIMAX, Constants.SKIER_JUMP_ROLL, Constants.SKIER_JUMP_ALMOST, Constants.SKIER_JUMP_LANDING],
+    runLeftAnimation = [Constants.RHINO_RUN_LEFT, Constants.RHINO_RUN_LEFT_2];
 
-describe('animation controller tests', () => {
+describe('no loop animation controller tests', () => {
     let initializeTests = () => {
         animationController = new AnimationController();
     };
@@ -48,6 +49,9 @@ describe('animation controller tests', () => {
         animationController.play(longAnimation);
 
         gameManager.timer = animationController.animationInterval;
+        gameManager.getCurrentFrame = jest.fn();
+        gameManager.getCurrentFrame.mockReturnValueOnce(1);
+
         animationController.update();
 
         let secondFrame = longAnimation[1];
@@ -88,8 +92,11 @@ describe('animation controller tests', () => {
     test('should return the last frame', () => {
         animationController.play(longAnimation);
 
+        animationController.currentFrameIndex = longAnimation.length - 1;
         gameManager.timer = animationController.animationInterval;
-        animationController.currentFrameIndex = longAnimation.length;
+        gameManager.getCurrentFrame = jest.fn();
+        gameManager.getCurrentFrame.mockReturnValueOnce(1);
+
         animationController.update();
 
         let lastFrame = longAnimation[longAnimation.length - 1];
@@ -109,5 +116,44 @@ describe('animation controller tests', () => {
         let frame = animationController.getCurrentFrame();
 
         expect(frame).toBeUndefined();
+    });
+});
+
+describe('when looping animations', () => {
+    let initializeTests = () => {
+        animationController = new AnimationController();
+    };
+
+    beforeEach(() => {
+        initializeTests();
+    });
+
+    test('should return the first frame', () => {
+        gameManager.getCurrentFrame = jest.fn();
+        gameManager.getCurrentFrame.mockReturnValueOnce(1);
+
+        animationController.play(runLeftAnimation, true);
+
+        let firstFrame = runLeftAnimation[0];
+        let frame = animationController.getCurrentFrame();
+
+        expect(frame).toBeDefined();
+        expect(frame).toEqual(firstFrame);
+    });
+
+    test('should return the second frame', () => {
+        animationController.lastFrame = 1;
+        gameManager.getCurrentFrame = jest.fn();
+        gameManager.getCurrentFrame.mockReturnValueOnce(2);
+
+        animationController.play(runLeftAnimation, true);
+
+        animationController.update();
+
+        let secondFrame = runLeftAnimation[1];
+        let frame = animationController.getCurrentFrame();
+
+        expect(frame).toBeDefined();
+        expect(frame).toEqual(secondFrame);
     });
 });

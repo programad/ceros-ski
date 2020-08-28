@@ -1,18 +1,53 @@
+import * as Constants from '../Constants';
+
 class GameManager {
+    lastCalledTime = performance.now();
+    currentFrame = 0;
+    animationFrameRate = 8;
+    fps;
+    gameState = Constants.GAME_STATE.RUNNING;
+
     constructor() {
+        this.totalTimer = 0;
         this.timer = 0;
     }
 
     updateTimer() {
         this.timer++;
+        this.totalTimer++;
+
+        let delta = (performance.now() - this.lastCalledTime)/1000;
+        this.lastCalledTime = performance.now();
+
+        if (this.timer >= this.animationFrameRate) {
+            this.resetTimer();
+            this.currentFrame++;
+            this.fps = Math.floor(1/delta);
+        }
     }
 
-    getTimer(){
+    getTotalTimer() {
+        return this.totalTimer;
+    }
+
+    getTimer() {
         return this.timer;
     }
 
-    resetTimer(){
+    resetTimer() {
         this.timer = 0;
+    }
+
+    getCurrentFrame() {
+        return this.currentFrame;
+    }
+
+    gameOver() {
+        this.gameState = Constants.GAME_STATE.OVER;
+    }
+
+    getGameState(){
+        return this.gameState;
     }
 }
 

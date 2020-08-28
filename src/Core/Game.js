@@ -5,14 +5,17 @@ import { Skier } from '../Entities/Skier';
 import { ObstacleManager } from '../Entities/Obstacles/ObstacleManager';
 import { Rect } from './Utils';
 import { gameManager } from './GameManager';
+import { Rhino } from '../Entities/Rhino';
 
 export class Game {
     gameWindow = null;
+    lastFrame = -1;
 
     constructor(canvas) {
         this.assetManager = new AssetManager();
         this.canvas = canvas || new Canvas(Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
         this.skier = new Skier(0, 0);
+        this.rhino = null;
         this.obstacleManager = new ObstacleManager();
 
         document.addEventListener('keydown', this.handleKeyDown.bind(this));
@@ -46,13 +49,27 @@ export class Game {
         this.obstacleManager.placeNewObstacle(this.gameWindow, previousGameWindow);
 
         this.skier.checkIfSkierHitObstacle(this.obstacleManager, this.assetManager);
+
+        this.checkRhinoSpawn();
+        if (this.rhino) {
+            this.rhino.update();
+            this.rhino.checkIfSkierHitObstacle(this.obstacleManager, this.assetManager);
+        }
     }
 
     drawGameWindow() {
+        let gameState = gameManager.getGameState();
+
         this.canvas.setDrawOffset(this.gameWindow.left, this.gameWindow.top);
 
-        this.skier.draw(this.canvas, this.assetManager);
-        this.obstacleManager.drawObstacles(this.canvas, this.assetManager);
+        if (this.rhino) {
+            this.rhino.draw(this.canvas, this.assetManager);
+        }
+
+        if (gameState !== Constants.GAME_STATE.OVER) {
+            this.skier.draw(this.canvas, this.assetManager);
+            this.obstacleManager.drawObstacles(this.canvas, this.assetManager);
+        }
     }
 
     calculateGameWindow() {
@@ -85,6 +102,16 @@ export class Game {
                 this.skier.jump();
                 event.preventDefault();
                 break;
+        }
+    }
+
+    checkRhinoSpawn() {
+        if (!this.rhino) {
+            let totalTimer = gameManager.getTotalTimer();
+            if (totalTimer >= Constants.RHINO_STARTING_TIMER) {
+                this.rhino = new Rhino(this.skier.x, this.skier.y - Constants.RHINO_STARTING_DISTANCE);
+                this.rhino.chase(this.skier);
+            }
         }
     }
 }
