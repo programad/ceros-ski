@@ -1,11 +1,12 @@
 import * as Constants from '../../Constants';
 import { randomInt } from '../../Core/Utils';
-import { Obstacle } from "./Obstacle";
+import { Obstacle } from './Obstacle';
 
 const DISTANCE_BETWEEN_OBSTACLES = 50;
 const STARTING_OBSTACLE_GAP = 100;
 const STARTING_OBSTACLE_REDUCER = 300;
 const NEW_OBSTACLE_CHANCE = 8;
+const RAMP_CHANCE = 100;
 
 export class ObstacleManager {
     obstacles = [];
@@ -79,7 +80,12 @@ export class ObstacleManager {
 
     placeRandomObstacle(minX, maxX, minY, maxY) {
         const position = this.calculateOpenPosition(minX, maxX, minY, maxY);
-        const newObstacle = new Obstacle(position.x, position.y);
+
+        const rampChance = randomInt(1, 100);
+
+        const canPlaceRamp = rampChance <= RAMP_CHANCE;
+
+        const newObstacle = new Obstacle(position.x, position.y, canPlaceRamp);
 
         this.obstacles.push(newObstacle);
     }

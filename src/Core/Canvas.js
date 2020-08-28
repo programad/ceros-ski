@@ -18,13 +18,13 @@ export class Canvas {
 
     createCanvas() {
         const canvas = document.createElement('canvas');
-        canvas.id = "skiCanvas";
+        canvas.id = 'skiCanvas';
         canvas.width = this.width * window.devicePixelRatio;
         canvas.height = this.height * window.devicePixelRatio;
         canvas.style.width = this.width + 'px';
         canvas.style.height = this.height + 'px';
 
-        this.ctx = canvas.getContext("2d");
+        this.ctx = canvas.getContext('2d');
         this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
 
 

@@ -1,9 +1,10 @@
-import * as Constants from "../Constants";
-import { AssetManager } from "./AssetManager";
+import * as Constants from '../Constants';
+import { AssetManager } from './AssetManager';
 import { Canvas } from './Canvas';
-import { Skier } from "../Entities/Skier";
-import { ObstacleManager } from "../Entities/Obstacles/ObstacleManager";
+import { Skier } from '../Entities/Skier';
+import { ObstacleManager } from '../Entities/Obstacles/ObstacleManager';
 import { Rect } from './Utils';
+import { gameManager } from './GameManager';
 
 export class Game {
     gameWindow = null;
@@ -35,7 +36,9 @@ export class Game {
     }
 
     updateGameWindow() {
-        this.skier.move();
+        gameManager.updateTimer();
+
+        this.skier.update();
 
         const previousGameWindow = this.gameWindow;
         this.calculateGameWindow();
@@ -76,6 +79,10 @@ export class Game {
                 break;
             case Constants.KEYS.DOWN:
                 this.skier.turnDown();
+                event.preventDefault();
+                break;
+            case Constants.KEYS.SPACEBAR:
+                this.skier.jump();
                 event.preventDefault();
                 break;
         }

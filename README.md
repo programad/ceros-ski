@@ -1,55 +1,31 @@
 # Ceros Ski Code Challenge
 
-Welcome to the Ceros Code Challenge - Ski Edition!
+Welcome to my application for the Ceros Code Challenge - Ski Edition!
 
-For this challenge, we have included some base code for Ceros Ski, our version of the classic Windows game SkiFree. If
-you've never heard of SkiFree, Google has plenty of examples. Better yet, you can play our version here: 
-http://ceros-ski.herokuapp.com/  
-
-Or deploy it locally by running:
+As you guys may already know, you can test this project by running:
 ```
 npm install
 npm run dev
 ```
 
-There is no exact time limit on this challenge and we understand that everyone has varying levels of free time. We'd 
-rather you take the time and produce a solution up to your ability than rush and turn in a suboptimal challenge. Please 
-look through the requirements below and let us know when you will have something for us to look at. If anything is 
-unclear, don't hesitate to reach out.
+**Challenge fundamentals**
 
-**Requirements**
+* Good design/architecture;
+* Code quality;
+* Observe potential improvements;
 
-Throughout your completion of these requirements, be mindful of the design/architecture of your solutions and the 
-quality of your code. We've provided the base code as a sample of what we expect. That being said, there are ways the
-design and architecture could be better. If you find a better way to do something, by all means, make it better! Your 
-solution can only gain from having a better foundation.
+**Bug fixing**
 
-* **Fix a bug:**
+  As it was stated, there was a bug on the game which I solved by making the correct handling of the crash state of tie skier. The original task asked to solve the problem for the left arrow key but I made it work for both left and right arrow keys.
 
-  There is a bug in the game. Well, at least one bug that we know of. Use the following bug report to debug the code
-  and fix the root of the problem.
-  * Steps to Reproduce:
-    1. Load the game
-    1. Crash into an obstacle
-    1. Press the left arrow key
-  * Expected Result: The skier gets up and is facing to the left
-  * Actual Result: Giant blizzard occurs causing the screen to turn completely white (or maybe the game just crashes!)
-  
-* **Write unit tests:**
+  I also implemented a few unit tests to help avoid this problem to happen again.
 
-  The base code has Jest, a unit testing framework, installed. Write some unit tests to ensure that the above mentioned
-  bug does not come back.
-  
-* **Extend existing functionality:**
+**Extending existing functionality**
 
-  We want to see your ability to extend upon a part of the game that already exists. Add in the ability for the skier to 
-  jump. The asset file for jumps is already included. All you gotta do is make the guy jump. We even included some jump 
-  trick assets if you wanted to get really fancy!
-  * Have the skier jump by pressing a key AND use the ramp asset to have the skier jump whenever he hits a ramp.
-  * The skier should be able to jump over some obstacles while in the air. 
-    * Rocks can be jumped over
-    * Trees can NOT be jumped over
-  * Anything else you'd like to add to the skier's jumping ability, go for it!
+  For this task, I made the skier do a simple jump when pressing the SPACE BAR key. Also, if the skier hits a ramp, it will do an awesome front flip with a little chance of a back flip.
+  There was some sprites that looked misplaced to me (skier_jump_2, skier_jump_3 and skier_jump_4), so I switched places for the animation to look better.
+
+  I also added a Game Manager singleton to control the shared aspects of the game across other classes.
    
 * **Build something new:**
 

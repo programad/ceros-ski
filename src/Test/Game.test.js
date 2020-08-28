@@ -4,16 +4,16 @@ import { Game } from '../Core/Game';
 let game;
 
 describe('game initialization', () => {
-  let initializeTests = () => {
-    game = new Game({});
-  };
+    let initializeTests = () => {
+        game = new Game({});
+    };
 
-  beforeEach(() => {
-    initializeTests();
-  });
+    beforeEach(() => {
+        initializeTests();
+    });
 
-  test('the game should be initialized', () => {
-    expect(game).not.toBeNull();
-    expect(game).not.toBeUndefined();
-  });
+    test('the game should be initialized', () => {
+        expect(game).not.toBeNull();
+        expect(game).not.toBeUndefined();
+    });
 });
