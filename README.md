@@ -8,6 +8,10 @@ npm install
 npm run dev
 ```
 
+OR
+
+ar [https://ceros-ski.azurewebsites.net](https://ceros-ski.azurewebsites.net)
+
 **Challenge fundamentals**
 
 * Good design/architecture;
@@ -49,8 +53,8 @@ Checklist of bonus items:
 - [X] Provide a way to reset the game once it's over
 - [X] Provide a way to pause and resume the game
 - [X] Add a score that increments as the skier skis further
-- [ ] Increase the difficulty the longer the skier skis (increase speed, increase obstacle frequency, etc.)
-- [ ] Deploy the game to a server so that we can play it without having to install it locally
+- [X] Increase the difficulty the longer the skier skis (increase speed, increase obstacle frequency, etc.)
+- [X] Deploy the game to a server so that we can play it without having to install it locally
 - [X] Write more unit tests for your code
 
 ----

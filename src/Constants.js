@@ -2,6 +2,8 @@ export const GAME_WIDTH = window.innerWidth;
 export const GAME_HEIGHT = window.innerHeight;
 export const CANVAS_PADDING = 10;
 
+export const GAME_SPEED_INCREMENT_INTERVAL = 100;
+
 export const SKIER_CRASH = 'skierCrash';
 export const SKIER_LEFT = 'skierLeft';
 export const SKIER_LEFTDOWN = 'skierLeftDown';

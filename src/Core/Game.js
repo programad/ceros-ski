@@ -7,14 +7,11 @@ import { Rect } from './Utils';
 import { gameManager } from './GameManager';
 import { Rhino } from '../Entities/Rhino';
 import { UiManager } from "../Core/UiManager";
-import { UiText } from '../Ui/UiText';
 
 export class Game {
     gameWindow = null;
     lastFrame = -1;
     gameState = null;
-    fps = 0;
-    score = 0;
 
     constructor(canvas) {
         this.assetManager = new AssetManager();
@@ -46,10 +43,11 @@ export class Game {
 
     updateGameWindow() {
         this.gameState = gameManager.getGameState();
-        this.fps = gameManager.getFps();
-        this.score = gameManager.getScore();
+        let fps = gameManager.getFps();
+        let score = gameManager.getScore();
+        let speedModifier = gameManager.getSpeedModifier();
 
-        this.uiManager.updateInfoPanel(this.fps, this.score);
+        this.uiManager.updateUi(fps, score, speedModifier);
 
         const previousGameWindow = this.gameWindow;
         this.calculateGameWindow();
@@ -68,6 +66,8 @@ export class Game {
                 this.rhino.update();
                 this.rhino.checkIfSkierHitObstacle(this.obstacleManager, this.assetManager);
             }
+
+            this.checkDificultyIncrement(score);
         }
     }
 
@@ -87,13 +87,15 @@ export class Game {
         }  else {
             this.skier.draw(this.canvas, this.assetManager);
             this.obstacleManager.drawObstacles(this.canvas, this.assetManager);
+            this.uiManager.drawBottomLeftPanel();
         }
 
-        this.drawInfoPanel();
+        this.drawUi();
     }
 
-    drawInfoPanel(){
-        this.uiManager.drawInfoPanelRight();
+    drawUi(){
+        this.uiManager.drawTopLeftPanel();
+        this.uiManager.drawTopRightPanel();
     }
 
     calculateGameWindow() {
@@ -156,6 +158,12 @@ export class Game {
                 this.rhino = new Rhino(this.skier.x, this.skier.y - Constants.RHINO_STARTING_DISTANCE);
                 this.rhino.chase(this.skier);
             }
+        }
+    }
+
+    checkDificultyIncrement(score) {
+        if (score % Constants.GAME_SPEED_INCREMENT_INTERVAL == 0) {
+            gameManager.increaseSpeedModifier();
         }
     }
 }

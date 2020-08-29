@@ -13,9 +13,9 @@ export class AnimationController {
 
     update() {
         let currentFrame = gameManager.getCurrentFrame();
-        
         if (currentFrame > this.lastFrame) {
             this.lastFrame = currentFrame;
+            
             this.currentFrameIndex++;
 
             if (this.loop) {

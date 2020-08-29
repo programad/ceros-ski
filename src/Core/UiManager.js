@@ -12,8 +12,14 @@ export class UiManager {
     gameOverScreen = [];
     gameOverScreenHeight = 0;
 
-    infoPanel = [];
-    infoPanelHeight = 0;
+    topLeftPanel = [];
+    topLeftPanelHeight = 0;
+
+    topRightPanel = [];
+    topRightPanelHeight = 0;
+
+    bottomLeftPanel = [];
+    bottomLeftPanelHeight = 0;
 
     constructor(canvas) {
         this.canvas = canvas;
@@ -22,6 +28,10 @@ export class UiManager {
         this.pausedText = new UiText('PAUSED', this.bigFont, this.uiColor);
         this.fpsText = new UiText('FPS: 00', this.smallFont, this.uiColor);
         this.scoreText = new UiText('SCORE: 000', this.smallFont, this.uiColor);
+        this.speedModifier = new UiText('SPEED: x0', this.smallFont, this.uiColor);
+        this.pauseKey = new UiText('ENTER to pause', this.smallFont, this.uiColor);
+        this.unpauseKey = new UiText('press ENTER to unpause', this.smallFont, this.uiColor);
+        this.jumpKey = new UiText('SPACE BAR to jump', this.smallFont, this.uiColor);
 
         this.init();
     }
@@ -29,11 +39,14 @@ export class UiManager {
     init() {
         this.setPauseScreen();
         this.setGameOverScreen();
-        this.setInfoPanelRight();
+        this.setTopLeftPanel();
+        this.setTopRightPanel();
+        this.setBottomLeftPanel();
     }
 
     setPauseScreen() {
         this.pauseScreen.push(this.pausedText);
+        this.pauseScreen.push(this.unpauseKey);
 
         this.pauseScreenHeight = this.calculateScreenHeight(this.pauseScreen);
     }
@@ -54,20 +67,43 @@ export class UiManager {
         this.drawScreen(this.gameOverScreen, this.gameOverScreenHeight, Constants.TEXT_POSITION.CENTER);
     }
 
-    setInfoPanelRight() {
-        this.infoPanel.push(this.fpsText);
-        this.infoPanel.push(this.scoreText);
+    setTopLeftPanel() {
+        this.topLeftPanel.push(this.scoreText);
+        this.topLeftPanel.push(this.speedModifier);
 
-        this.infoPanelHeight = this.calculateScreenHeight(this.infoPanel);
+        this.topLeftPanelHeight = this.calculateScreenHeight(this.topLeftPanel);
     }
 
-    updateInfoPanel(fps, score) {
-        this.infoPanel[0].text = 'FPS: ' + fps;
-        this.infoPanel[1].text = 'SCORE: ' + score;
+    setTopRightPanel() {
+        this.topRightPanel.push(this.fpsText);
+
+        this.topRightPanelHeight = this.calculateScreenHeight(this.topRightPanel);
     }
 
-    drawInfoPanelRight() {
-        this.drawScreen(this.infoPanel, this.infoPanelHeight, Constants.TEXT_POSITION.RIGHT_TOP);
+    setBottomLeftPanel() {
+        this.bottomLeftPanel.push(this.pauseKey);
+        this.bottomLeftPanel.push(this.jumpKey);
+
+        this.bottomLeftPanelHeight = this.calculateScreenHeight(this.bottomLeftPanel);
+    }
+
+    updateUi(fps, score, speedModifier) {
+        this.topLeftPanel[0].text = 'SCORE: ' + score;
+        this.topLeftPanel[1].text = 'SPEED: x' + speedModifier.toFixed(2);
+
+        this.topRightPanel[0].text = fps + ' FPS';
+    }
+
+    drawTopLeftPanel() {
+        this.drawScreen(this.topLeftPanel, this.topLeftPanelHeight, Constants.TEXT_POSITION.LEFT_TOP);
+    }
+
+    drawTopRightPanel() {
+        this.drawScreen(this.topRightPanel, this.topRightPanelHeight, Constants.TEXT_POSITION.RIGHT_TOP);
+    }
+
+    drawBottomLeftPanel() {
+        this.drawScreen(this.bottomLeftPanel, this.bottomLeftPanelHeight, Constants.TEXT_POSITION.LEFT_BOTTOM);
     }
 
     drawText(textObject, number) {

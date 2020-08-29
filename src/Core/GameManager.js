@@ -8,6 +8,7 @@ class GameManager {
     animationFrameDuration = 8;
     fps = 0;
     score = 0;
+    speedModifier = 1;
 
     constructor() {
         this.totalTimer = 0;
@@ -28,16 +29,28 @@ class GameManager {
         }
     }
 
-    incrementScore() {
-        this.score++;
+    getSpeedModifier(){
+        return this.speedModifier;
     }
+
+    increaseSpeedModifier(){
+        this.speedModifier *= 1.01;
+    }    
 
     getFps(){
         return this.fps;
     }
 
+    getCurrentFrame() {
+        return this.currentFrame;
+    }
+
     getScore(){
         return this.score;
+    }
+
+    incrementScore() {
+        this.score++;
     }
 
     getTotalTimer() {
@@ -50,10 +63,6 @@ class GameManager {
 
     resetTimer() {
         this.timer = 0;
-    }
-
-    getCurrentFrame() {
-        return this.currentFrame;
     }
 
     getGameState() {

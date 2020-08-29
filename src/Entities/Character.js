@@ -1,6 +1,7 @@
 import * as Constants from '../Constants';
 import { Entity } from './Entity';
 import { intersectTwoRects, Rect } from '../Core/Utils';
+import { gameManager } from '../Core/GameManager';
 
 export class Character extends Entity {
     name = '';
@@ -41,39 +42,39 @@ export class Character extends Entity {
 
     moveLeft() {
         if (this.canMove) {
-            this.x -= this.speedX;
+            this.x -= this.speedX * gameManager.getSpeedModifier();
         }
     }
 
     moveLeftDown() {
         if (this.canMove) {
-            this.x -= this.speedX * this.diagonalFactor;
-            this.y += this.speedY * this.diagonalFactor;
+            this.x -= this.speedX * this.diagonalFactor * gameManager.getSpeedModifier();
+            this.y += this.speedY * this.diagonalFactor * gameManager.getSpeedModifier();
         }
     }
 
     moveDown() {
         if (this.canMove) {
-            this.y += this.speedY;
+            this.y += this.speedY * gameManager.getSpeedModifier();
         }
     }
 
     moveRightDown() {
         if (this.canMove) {
-            this.x += this.speedX * this.diagonalFactor;
-            this.y += this.speedY * this.diagonalFactor;
+            this.x += this.speedX * this.diagonalFactor * gameManager.getSpeedModifier();
+            this.y += this.speedY * this.diagonalFactor * gameManager.getSpeedModifier();
         }
     }
 
     moveRight() {
         if (this.canMove) {
-            this.x += this.speedX;
+            this.x += this.speedX * gameManager.getSpeedModifier();
         }
     }
 
     moveUp() {
         if (this.canMove) {
-            this.y -= this.speedY
+            this.y -= this.speedY * gameManager.getSpeedModifier();
         }
     }
 
