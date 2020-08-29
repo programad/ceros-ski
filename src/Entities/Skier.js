@@ -25,13 +25,14 @@ export class Skier extends Character {
     updateAsset() {
         if (this.isJumping) {
             this.assetName = this.animationController.getCurrentFrame();
-            this.move();
         } else {
             this.assetName = Constants.SKIER_DIRECTION_ASSET[this.direction];
         }
     }
 
-    move() {
+    move() {        
+        this.calculateSpeed();
+
         switch (this.direction) {
             case Constants.CHARACTER_DIRECTIONS.LEFT_DOWN:
                 this.moveLeftDown();
@@ -42,6 +43,15 @@ export class Skier extends Character {
             case Constants.CHARACTER_DIRECTIONS.RIGHT_DOWN:
                 this.moveRightDown();
                 break;
+        }
+    }
+
+    calculateSpeed() {
+        if (this.isJumping) {
+            this.speedY *= Constants.SKIER_JUMP_FACTOR;
+        }
+        else {
+            this.speedY = Constants.RHINO_STARTING_SPEED * 1;
         }
     }
 

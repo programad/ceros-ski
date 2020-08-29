@@ -35,6 +35,7 @@ export const RAMP = 'ramp';
 
 export const SKIER_STARTING_SPEED = 10;
 export const SKIER_DIAGONAL_FACTOR = 1.1;
+export const SKIER_JUMP_FACTOR = 1.002;
 
 export const RHINO_STARTING_SPEED = 10.5;
 export const RHINO_STARTING_TIMER = 10;
