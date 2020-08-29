@@ -1,6 +1,5 @@
 import { Entity } from "../Entities/Entity";
 
-
 let entity, canvas;
 
 beforeEach(() => {

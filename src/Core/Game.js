@@ -7,10 +7,14 @@ import { Rect } from './Utils';
 import { gameManager } from './GameManager';
 import { Rhino } from '../Entities/Rhino';
 import { UiManager } from "../Core/UiManager";
+import { UiText } from '../Ui/UiText';
 
 export class Game {
     gameWindow = null;
     lastFrame = -1;
+    gameState = null;
+    fps = 0;
+    score = 0;
 
     constructor(canvas) {
         this.assetManager = new AssetManager();
@@ -41,12 +45,16 @@ export class Game {
     }
 
     updateGameWindow() {
-        let gameState = gameManager.getGameState();
+        this.gameState = gameManager.getGameState();
+        this.fps = gameManager.getFps();
+        this.score = gameManager.getScore();
+
+        this.uiManager.updateInfoPanel(this.fps, this.score);
 
         const previousGameWindow = this.gameWindow;
         this.calculateGameWindow();
 
-        if (gameState != Constants.GAME_STATE.PAUSED) {
+        if (this.gameState != Constants.GAME_STATE.PAUSED) {
             gameManager.updateTimer();
 
             this.skier.update();
@@ -60,29 +68,32 @@ export class Game {
                 this.rhino.update();
                 this.rhino.checkIfSkierHitObstacle(this.obstacleManager, this.assetManager);
             }
-
         }
     }
 
     drawGameWindow() {
-        let gameState = gameManager.getGameState();
-
         this.canvas.setDrawOffset(this.gameWindow.left, this.gameWindow.top);
 
         if (this.rhino) {
             this.rhino.draw(this.canvas, this.assetManager);
         }
 
-        if (gameState === Constants.GAME_STATE.OVER) {
+        if (this.gameState === Constants.GAME_STATE.OVER) {
             this.uiManager.drawGameOver();
-        } else if (gameState === Constants.GAME_STATE.PAUSED) {
+        } else if (this.gameState === Constants.GAME_STATE.PAUSED) {
             this.skier.draw(this.canvas, this.assetManager);
             this.obstacleManager.drawObstacles(this.canvas, this.assetManager);
-            this.uiManager.drawPaused();
+            this.uiManager.drawPauseScreen();
         }  else {
             this.skier.draw(this.canvas, this.assetManager);
             this.obstacleManager.drawObstacles(this.canvas, this.assetManager);
         }
+
+        this.drawInfoPanel();
+    }
+
+    drawInfoPanel(){
+        this.uiManager.drawInfoPanelRight();
     }
 
     calculateGameWindow() {
@@ -94,9 +105,7 @@ export class Game {
     }
 
     handleKeyDown(event) {
-        let gameState = gameManager.getGameState();
-
-        if (gameState === Constants.GAME_STATE.RUNNING) {
+        if (this.gameState === Constants.GAME_STATE.RUNNING) {
             switch (event.which) {
                 case Constants.KEYS.LEFT:
                     this.skier.turnLeft();
@@ -123,7 +132,7 @@ export class Game {
                     event.preventDefault();
                     break;
             }
-        } else if (gameState === Constants.GAME_STATE.OVER) {
+        } else if (this.gameState === Constants.GAME_STATE.OVER) {
             switch (event.which) {
                 case Constants.KEYS.ENTER:
                     gameManager.restart();

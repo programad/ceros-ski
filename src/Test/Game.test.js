@@ -1,17 +1,21 @@
 import 'babel-polyfill';
+import * as Mocks from './Mocks';
 import { Game } from '../Core/Game';
 import { gameManager } from '../Core/GameManager'
-jest.mock('../Core/GameManager');
 
-let game;
+let canvas, game;
+
+beforeEach(() => {
+    canvas = Mocks.CANVAS;
+    game = new Game(canvas);
+	game.assetManager = Mocks.ASSET_MANAGER;
+});
 
 describe('game initialization', () => {
-    let initializeTests = () => {
-        game = new Game({});
-    };
 
-    beforeEach(() => {
-        initializeTests();
+    test('window should be initialized', () => {
+        expect(window).not.toBeNull();
+        expect(window).not.toBeUndefined();
     });
 
     test('the game should be initialized', () => {
@@ -54,7 +58,7 @@ describe('game initialization', () => {
 
         game.load().then(() => {
             game.updateGameWindow();
-    
+
             expect(gameManager.updateTimer).toBeCalled();
         });
     });

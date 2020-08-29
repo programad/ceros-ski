@@ -2,11 +2,12 @@ import * as Constants from '../Constants';
 
 class GameManager {
     isPaused = false;
+    gameState = Constants.GAME_STATE.RUNNING;
     lastCalledTime = performance.now();
     currentFrame = 0;
-    animationFrameRate = 8;
-    fps;
-    gameState = Constants.GAME_STATE.RUNNING;
+    animationFrameDuration = 8;
+    fps = 0;
+    score = 0;
 
     constructor() {
         this.totalTimer = 0;
@@ -20,11 +21,23 @@ class GameManager {
         let delta = (performance.now() - this.lastCalledTime) / 1000;
         this.lastCalledTime = performance.now();
 
-        if (this.timer >= this.animationFrameRate) {
+        if (this.timer >= this.animationFrameDuration) {
             this.resetTimer();
             this.currentFrame++;
             this.fps = Math.floor(1 / delta);
         }
+    }
+
+    incrementScore() {
+        this.score++;
+    }
+
+    getFps(){
+        return this.fps;
+    }
+
+    getScore(){
+        return this.score;
     }
 
     getTotalTimer() {
@@ -54,7 +67,6 @@ class GameManager {
     pause() {
         if (this.gameState !== Constants.GAME_STATE.OVER) {
             this.isPaused = !this.isPaused;
-            console.log(this.isPaused);
 
             if (this.isPaused) {
                 this.gameState = Constants.GAME_STATE.PAUSED;

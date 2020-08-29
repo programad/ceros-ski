@@ -1,0 +1,2 @@
+export const CANVAS = { setDrawOffset: () => jest.fn(), measureUiText: () => jest.fn(), drawText: () => jest.fn() };
+export const ASSET_MANAGER = { loadAssets: () => jest.fn(), getAsset: () => ({ width: 0, height: 0 }) };

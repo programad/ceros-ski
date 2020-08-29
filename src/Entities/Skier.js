@@ -2,6 +2,7 @@ import * as Constants from '../Constants';
 import { Character } from './Character';
 import { randomInt } from '../Core/Utils';
 import { AnimationController } from '../Core/AnimationController';
+import { gameManager } from '../Core/GameManager';
 
 export class Skier extends Character {
     name = 'skier';
@@ -15,6 +16,8 @@ export class Skier extends Character {
     speedX = Constants.SKIER_STARTING_SPEED;
     speedY = Constants.SKIER_STARTING_SPEED;
     diagonalFactor = Constants.SKIER_DIAGONAL_FACTOR;
+
+    previousY = 0;
 
     constructor(x, y) {
         super(x, y);
@@ -43,6 +46,11 @@ export class Skier extends Character {
             case Constants.CHARACTER_DIRECTIONS.RIGHT_DOWN:
                 this.moveRightDown();
                 break;
+        }
+
+        if (this.previousY < this.y) {
+            this.previousY = this.y;
+            gameManager.incrementScore();
         }
     }
 

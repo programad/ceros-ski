@@ -1,29 +1,38 @@
+import 'babel-polyfill';
 import { UiManager } from "../Core/UiManager";
 import * as Constants from '../Constants';
 import { UiText } from "../Ui/UiText";
+import * as Mocks from './Mocks';
 
-let uiManager;
+let canvas, uiManager;
+
+beforeAll(() => {
+    canvas = Mocks.CANVAS;
+    uiManager = new UiManager(canvas);
+});
 
 describe('ui manager tests', () => {
-    let initializeTests = () => {
-        uiManager = new UiManager({});
-    };
-
-    beforeEach(() => {
-        initializeTests();
-    });
 
     test('should be initialized', () => {
         expect(uiManager).toBeDefined();
     });
 
+    test('should initialize game over screen', () => {
+
+        uiManager.setGameOverScreen = jest.fn();
+
+        uiManager.init();
+
+        expect(uiManager.setGameOverScreen).toBeCalled();
+    });
+
     test('should draw game over', () => {
 
-        uiManager.drawText = jest.fn();
+        uiManager.drawScreen = jest.fn();
 
         uiManager.drawGameOver();
 
-        expect(uiManager.drawText).toBeCalled();
+        expect(uiManager.drawScreen).toBeCalled();
     });
 
     test('should draw text', () => {

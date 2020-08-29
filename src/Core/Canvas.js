@@ -49,24 +49,46 @@ export class Canvas {
         this.ctx.drawImage(image, x, y, width, height);
     }
 
-    drawText(text, font, color, position){
+    measureUiText(text, font) {
+        this.ctx.font = font;
+        let measure = this.ctx.measureText(text);
+        let fontSize = parseInt(this.ctx.font);
+        
+        return {
+            width: measure.width,
+            height: fontSize
+        }
+    }
+
+    drawOverlay(){
+        this.ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+        this.ctx.fillRect(0, 0, this.width, this.height);
+    }
+
+    drawText(text, font, color, position, number, screenHeight) {
         let align = 'center';
         this.ctx.font = font;
+        this.ctx.textBaseline = 'middle';
         let fontSize = parseInt(this.ctx.font);
 
-        let posX = (this.width/2);
-        let posY = (this.height/2) - fontSize;
+        let posX = (this.width / 2);
+        let posY = (this.height / 2) - (number * (screenHeight/2));
 
         switch (position) {
-            case Constants.TEXT_POSITION.CENTER:                
-                break;        
+            case Constants.TEXT_POSITION.CENTER:
+                break;
+            case Constants.TEXT_POSITION.RIGHT_TOP:
+                align = 'right';
+                posX = this.width - Constants.CANVAS_PADDING;
+                posY = number * screenHeight / (screenHeight / fontSize);
+                break;
             default:
                 break;
         }
 
         this.ctx.textAlign = align;
         this.ctx.fillStyle = color;
-        
+
         this.ctx.fillText(text, posX, posY);
     }
 }
