@@ -34,8 +34,9 @@ npm run dev
   The game now has a angry rhino chasing the player down the mountain. It can run to the left, to the right and downwards. If it catches the player, you are done.
   
 * The rhino appears after a specific amount of time and at a specific distance from the player;
-* The rhino runs faster then the player when both are going downwards but the player goes faster if slides on diagonal, adding some challenge to the game.
-* The rhino received a new animation to run to the right. It was possible to flip the sprite by code but having a dedicated sprite is more performant.
+* The rhino runs faster then the player when both are going downwards but the player goes faster if slides on diagonal, adding some challenge to the game;
+* The rhino sprites were scaled up to 128px height to bring consistency with the skier being eaten size and to look more scary;
+* The rhino received a new animation to run to the right. It was possible to flip the sprite by code but having a dedicated sprite is more performant;
 
 **Documentation:**
 

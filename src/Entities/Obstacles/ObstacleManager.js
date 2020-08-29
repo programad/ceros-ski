@@ -11,8 +11,7 @@ const RAMP_CHANCE = 100;
 export class ObstacleManager {
     obstacles = [];
 
-    constructor() {
-    }
+    constructor() {}
 
     getObstacles() {
         return this.obstacles;
@@ -32,7 +31,7 @@ export class ObstacleManager {
         const minY = STARTING_OBSTACLE_GAP;
         const maxY = Constants.GAME_HEIGHT / 2;
 
-        for(let i = 0; i < numberObstacles; i++) {
+        for (let i = 0; i < numberObstacles; i++) {
             this.placeRandomObstacle(minX, maxX, minY, maxY);
         }
 
@@ -42,8 +41,8 @@ export class ObstacleManager {
     }
 
     placeNewObstacle(gameWindow, previousGameWindow) {
-        const shouldPlaceObstacle = randomInt(1, NEW_OBSTACLE_CHANCE);
-        if(shouldPlaceObstacle !== NEW_OBSTACLE_CHANCE) {
+        const shouldPlaceObstacle = this.getObstacleChance();
+        if (shouldPlaceObstacle !== NEW_OBSTACLE_CHANCE) {
             return;
         }
 
@@ -51,20 +50,22 @@ export class ObstacleManager {
             previousGameWindow = gameWindow;
         }
 
-        if(gameWindow.left < previousGameWindow.left) {
+        if (gameWindow.left < previousGameWindow.left) {
             this.placeObstacleLeft(gameWindow);
-        }
-        else if(gameWindow.left > previousGameWindow.left) {
+        } else if (gameWindow.left > previousGameWindow.left) {
             this.placeObstacleRight(gameWindow);
         }
 
-        if(gameWindow.top < previousGameWindow.top) {
+        if (gameWindow.top < previousGameWindow.top) {
             this.placeObstacleTop(gameWindow);
-        }
-        else if(gameWindow.top > previousGameWindow.top) {
+        } else if (gameWindow.top > previousGameWindow.top) {
             this.placeObstacleBottom(gameWindow);
         }
     };
+
+    getObstacleChance(){
+        return randomInt(1, NEW_OBSTACLE_CHANCE)
+    }
 
     placeObstacleLeft(gameWindow) {
         this.placeRandomObstacle(gameWindow.left, gameWindow.left, gameWindow.top, gameWindow.bottom);
@@ -107,10 +108,9 @@ export class ObstacleManager {
             );
         });
 
-        if(foundCollision) {
+        if (foundCollision) {
             return this.calculateOpenPosition(minX, maxX, minY, maxY);
-        }
-        else {
+        } else {
             return {
                 x: x,
                 y: y

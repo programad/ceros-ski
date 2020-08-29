@@ -25,7 +25,6 @@ export class Character extends Entity {
 
     setDirection(direction) {
         this.direction = direction;
-        this.updateAsset();
     }
 
     update() {
@@ -79,8 +78,8 @@ export class Character extends Entity {
     }
 
     checkIfSkierHitObstacle(obstacleManager, assetManager) {
-        this.asset = assetManager.getAsset(this.assetName);
-        this.myBounds = this.getBounds(this, this.asset);
+        this.myAsset = assetManager.getAsset(this.assetName);
+        this.myBounds = this.getBounds(this, this.myAsset);
 
         const collision = obstacleManager.getObstacles().find((obstacle) => {
             const obstacleAsset = assetManager.getAsset(obstacle.getAssetName());

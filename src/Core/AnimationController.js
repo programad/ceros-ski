@@ -3,8 +3,8 @@ import { gameManager } from '../Core/GameManager';
 export class AnimationController {
     playing = false;
     loop = false;
-    animationFrames = [];
-    animationFrameDuration = 8;
+    assetNames = [];
+    currentFrameIndex = 0;
 
     constructor(name) {
         this.lastFrame = gameManager.getCurrentFrame();
@@ -13,20 +13,19 @@ export class AnimationController {
 
     update() {
         let currentFrame = gameManager.getCurrentFrame();
+        
         if (currentFrame > this.lastFrame) {
             this.lastFrame = currentFrame;
             this.currentFrameIndex++;
 
             if (this.loop) {
-                this.currentFrameIndex = (this.currentFrameIndex % this.animationFrames.length + this.animationFrames.length) % this.animationFrames.length;
+                this.currentFrameIndex = (this.currentFrameIndex % this.assetNames.length + this.assetNames.length) % this.assetNames.length;
             } else {
-                if (this.currentFrameIndex >= this.animationFrames.length) {
-                    this.currentFrameIndex = this.animationFrames.length - 1;
+                if (this.currentFrameIndex >= this.assetNames.length) {
+                    this.currentFrameIndex = this.assetNames.length - 1;
                     this.playing = false;
                 }
             }
-
-            this.currentFrame = this.animationFrames[this.currentFrameIndex];
         }
     }
 
@@ -34,15 +33,12 @@ export class AnimationController {
         if (assets) {
             this.loop = loop ? loop : false;
             this.playing = true;
-            this.animationFrames = assets;
+            this.assetNames = assets;
             this.currentFrameIndex = 0;
-            this.animationInterval = this.animationFrameDuration;
-
-            this.currentFrame = this.animationFrames[this.currentFrameIndex];
         }
     }
 
-    getCurrentFrame() {
-        return this.animationFrames[this.currentFrameIndex];
+    getCurrentAssetName() {
+        return this.assetNames[this.currentFrameIndex];
     }
 }

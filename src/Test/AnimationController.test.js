@@ -39,7 +39,7 @@ describe('no loop animation controller tests', () => {
         animationController.play(longAnimation);
 
         let firstFrame = longAnimation[0];
-        let frame = animationController.getCurrentFrame();
+        let frame = animationController.getCurrentAssetName();
 
         expect(frame).toBeDefined();
         expect(frame).toEqual(firstFrame);
@@ -55,7 +55,7 @@ describe('no loop animation controller tests', () => {
         animationController.update();
 
         let secondFrame = longAnimation[1];
-        let frame = animationController.getCurrentFrame();
+        let frame = animationController.getCurrentAssetName();
 
         expect(frame).toBeDefined();
         expect(frame).toEqual(secondFrame);
@@ -69,7 +69,7 @@ describe('no loop animation controller tests', () => {
         animationController.update();
 
         let lastFrame = longAnimation[longAnimation.length - 1];
-        let frame = animationController.getCurrentFrame();
+        let frame = animationController.getCurrentAssetName();
 
         expect(frame).toBeDefined();
         expect(frame).toEqual(lastFrame);
@@ -83,7 +83,7 @@ describe('no loop animation controller tests', () => {
         animationController.update();
 
         let lastFrame = singleFrameAnimation[singleFrameAnimation.length - 1];
-        let frame = animationController.getCurrentFrame();
+        let frame = animationController.getCurrentAssetName();
 
         expect(frame).toBeDefined();
         expect(frame).toEqual(lastFrame);
@@ -100,7 +100,7 @@ describe('no loop animation controller tests', () => {
         animationController.update();
 
         let lastFrame = longAnimation[longAnimation.length - 1];
-        let frame = animationController.getCurrentFrame();
+        let frame = animationController.getCurrentAssetName();
 
         expect(frame).toBeDefined();
         expect(frame).toEqual(lastFrame);
@@ -111,9 +111,8 @@ describe('no loop animation controller tests', () => {
 
         animationController.currentFrameIndex = longAnimation.length;
         animationController.update();
-
-        let lastFrame = longAnimation[longAnimation.length - 1];
-        let frame = animationController.getCurrentFrame();
+        
+        let frame = animationController.getCurrentAssetName();
 
         expect(frame).toBeUndefined();
     });
@@ -135,7 +134,7 @@ describe('when looping animations', () => {
         animationController.play(runLeftAnimation, true);
 
         let firstFrame = runLeftAnimation[0];
-        let frame = animationController.getCurrentFrame();
+        let frame = animationController.getCurrentAssetName();
 
         expect(frame).toBeDefined();
         expect(frame).toEqual(firstFrame);
@@ -151,7 +150,7 @@ describe('when looping animations', () => {
         animationController.update();
 
         let secondFrame = runLeftAnimation[1];
-        let frame = animationController.getCurrentFrame();
+        let frame = animationController.getCurrentAssetName();
 
         expect(frame).toBeDefined();
         expect(frame).toEqual(secondFrame);

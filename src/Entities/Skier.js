@@ -27,7 +27,7 @@ export class Skier extends Character {
 
     updateAsset() {
         if (this.isJumping) {
-            this.assetName = this.animationController.getCurrentFrame();
+            this.assetName = this.animationController.getCurrentAssetName();
         } else {
             this.assetName = Constants.SKIER_DIRECTION_ASSET[this.direction];
         }
@@ -59,7 +59,7 @@ export class Skier extends Character {
             this.speedY *= Constants.SKIER_JUMP_FACTOR;
         }
         else {
-            this.speedY = Constants.RHINO_STARTING_SPEED * 1;
+            this.speedY = Constants.SKIER_STARTING_SPEED;
         }
     }
 

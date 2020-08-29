@@ -19,6 +19,8 @@ export class Rhino extends Character {
     isEating = false;
     target = null;
 
+    xDiff = 0;
+
     constructor(x, y) {
         super(x, y);
 
@@ -28,22 +30,19 @@ export class Rhino extends Character {
     }
 
     updateAsset() {
-        this.assetName = this.animationController.getCurrentFrame();
+        this.assetName = this.animationController.getCurrentAssetName();
     }
 
     move() {
         if (this.target) {
-            
-            let xDiff = Math.abs(this.x - this.target.x);
+            this.xDiff = Math.abs(this.x - this.target.x);
 
-            if (xDiff < this.speedX) {
-                this.setDirection(Constants.CHARACTER_DIRECTIONS.DOWN);
-            } else if (this.target.x < this.x && this.target.direction !== Constants.CHARACTER_DIRECTIONS.DOWN) {
-                this.animationController.play(this.runLeftAnimation, true);
-                this.setDirection(Constants.CHARACTER_DIRECTIONS.LEFT_DOWN);
-            } else if (this.target.x > this.x && this.target.direction !== Constants.CHARACTER_DIRECTIONS.DOWN) {
-                this.animationController.play(this.runRightAnimation, true);
-                this.setDirection(Constants.CHARACTER_DIRECTIONS.RIGHT_DOWN);
+            if (this.x === this.target.x) {
+                this.turnDown();
+            } else if (this.target.x < this.x) {
+                this.turnLeft();
+            } else if (this.target.x > this.x) {
+                this.turnRight();
             }
 
             this.switchDirection();
@@ -53,29 +52,55 @@ export class Rhino extends Character {
     switchDirection() {
         switch (this.direction) {
             case Constants.CHARACTER_DIRECTIONS.LEFT_DOWN:
+                this.animationController.play(this.runLeftAnimation, true);
                 this.moveLeftDown();
                 break;
             case Constants.CHARACTER_DIRECTIONS.DOWN:
                 this.moveDown();
                 break;
             case Constants.CHARACTER_DIRECTIONS.RIGHT_DOWN:
+                this.animationController.play(this.runRightAnimation, true);
                 this.moveRightDown();
                 break;
         }
     }
 
+    moveLeftDown() {
+        let amountToMoveX = this.setAmountToMove();
+
+        if (this.canMove) {
+            this.x -= amountToMoveX;
+            this.y += this.speedY * this.diagonalFactor;
+        }
+    }
+
+    moveRightDown() {
+        let amountToMoveX = this.setAmountToMove();
+        
+        if (this.canMove) {
+            this.x += amountToMoveX;
+            this.y += this.speedY * this.diagonalFactor;
+        }
+    }
+
+    setAmountToMove() {
+        let amountToMoveX = this.speedX * this.diagonalFactor;
+
+        if (this.xDiff < amountToMoveX) {
+            amountToMoveX = this.xDiff;
+        }
+
+        return amountToMoveX;
+    }
+
     turnLeft() {
-        if (this.direction === Constants.CHARACTER_DIRECTIONS.LEFT) {
-            this.moveLeft();
-        } else {
+        if (this.direction !== Constants.CHARACTER_DIRECTIONS.LEFT_DOWN) {
             this.setDirection(this.direction - 1);
         }
     }
 
     turnRight() {
-        if (this.direction === Constants.CHARACTER_DIRECTIONS.RIGHT) {
-            this.moveRight();
-        } else {
+        if (this.direction !== Constants.CHARACTER_DIRECTIONS.RIGHT_DOWN) {
             this.setDirection(this.direction + 1);
         }
     }

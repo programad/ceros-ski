@@ -151,8 +151,8 @@ export class Game {
 
     checkRhinoSpawn() {
         if (!this.rhino) {
-            let totalTimer = gameManager.getTotalTimer();
-            if (totalTimer >= Constants.RHINO_STARTING_TIMER) {
+            let score = gameManager.getScore();
+            if (score >= Constants.RHINO_STARTING_NUMBER) {
                 this.rhino = new Rhino(this.skier.x, this.skier.y - Constants.RHINO_STARTING_DISTANCE);
                 this.rhino.chase(this.skier);
             }

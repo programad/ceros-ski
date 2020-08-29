@@ -1,14 +1,27 @@
 import 'babel-polyfill';
 import { Rhino } from '../Entities/Rhino';
+import { Skier } from '../Entities/Skier';
 import * as Constants from '../Constants';
 
 let rhino;
 
 beforeEach(() => {
     rhino = new Rhino(0, 0);
+    rhino.target = new Skier(0,200);
 });
 
-describe("Testing Rhino", () => {
+describe("rhino tests", () => {
+
+    describe('on initialization', () => {
+        test('should be initialized', () => {
+            expect(rhino.name).toEqual('rhino');
+            expect(rhino.runLeftAnimation.length).toBeGreaterThan(0);
+            expect(rhino.runRightAnimation.length).toBeGreaterThan(0);
+            expect(rhino.eatingAnimation.length).toBeGreaterThan(0);
+            expect(rhino.assetName).toEqual(Constants.RHINO_DEFAULT);
+        });
+    });
+
 
     describe("setting directions", () => {
         test("should set right", () => {
@@ -63,20 +76,12 @@ describe("Testing Rhino", () => {
             expect(rhino.direction).toBe(Constants.CHARACTER_DIRECTIONS.LEFT_DOWN);
         });
 
-        test("skier going left_down should turn left", () => {
+        test("skier going left_down keep going left_down", () => {
             rhino.setDirection(Constants.CHARACTER_DIRECTIONS.LEFT_DOWN);
 
             rhino.turnLeft();
 
-            expect(rhino.direction).toBe(Constants.CHARACTER_DIRECTIONS.LEFT);
-        });
-
-        test("skier going left stay going left", () => {
-            rhino.setDirection(Constants.CHARACTER_DIRECTIONS.LEFT);
-
-            rhino.turnLeft();
-
-            expect(rhino.direction).toBe(Constants.CHARACTER_DIRECTIONS.LEFT);
+            expect(rhino.direction).toBe(Constants.CHARACTER_DIRECTIONS.LEFT_DOWN);
         });
     });
 
@@ -105,20 +110,12 @@ describe("Testing Rhino", () => {
             expect(rhino.direction).toBe(Constants.CHARACTER_DIRECTIONS.RIGHT_DOWN);
         });
 
-        test("skier going right_down should turn right", () => {
+        test("skier going right_down should keep going right_down", () => {
             rhino.setDirection(Constants.CHARACTER_DIRECTIONS.RIGHT_DOWN);
 
             rhino.turnRight();
 
-            expect(rhino.direction).toBe(Constants.CHARACTER_DIRECTIONS.RIGHT);
-        });
-
-        test("skier going right stay going right", () => {
-            rhino.setDirection(Constants.CHARACTER_DIRECTIONS.RIGHT);
-
-            rhino.turnRight();
-
-            expect(rhino.direction).toBe(Constants.CHARACTER_DIRECTIONS.RIGHT);
+            expect(rhino.direction).toBe(Constants.CHARACTER_DIRECTIONS.RIGHT_DOWN);
         });
     });
 
@@ -202,6 +199,32 @@ describe("Testing Rhino", () => {
             rhino.turnUp();
 
             expect(rhino.y).toEqual(previousY);
+            expect(rhino.direction).toEqual(Constants.CHARACTER_DIRECTIONS.RIGHT_DOWN);
+        });
+    });
+
+    describe('on move', () => {
+        test('should go down', () => {
+            rhino.x = rhino.target.x;
+            
+            rhino.move();
+
+            expect(rhino.direction).toEqual(Constants.CHARACTER_DIRECTIONS.DOWN);
+        });
+
+        test('should go left_down', () => {
+            rhino.x = rhino.target.x + 1;
+            
+            rhino.move();
+
+            expect(rhino.direction).toEqual(Constants.CHARACTER_DIRECTIONS.LEFT_DOWN);
+        });
+        
+        test('should go right_down', () => {
+            rhino.x = rhino.target.x - 1;
+            
+            rhino.move();
+
             expect(rhino.direction).toEqual(Constants.CHARACTER_DIRECTIONS.RIGHT_DOWN);
         });
     });
