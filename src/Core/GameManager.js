@@ -1,6 +1,7 @@
 import * as Constants from '../Constants';
 
 class GameManager {
+    isPaused = false;
     lastCalledTime = performance.now();
     currentFrame = 0;
     animationFrameRate = 8;
@@ -16,13 +17,13 @@ class GameManager {
         this.timer++;
         this.totalTimer++;
 
-        let delta = (performance.now() - this.lastCalledTime)/1000;
+        let delta = (performance.now() - this.lastCalledTime) / 1000;
         this.lastCalledTime = performance.now();
 
         if (this.timer >= this.animationFrameRate) {
             this.resetTimer();
             this.currentFrame++;
-            this.fps = Math.floor(1/delta);
+            this.fps = Math.floor(1 / delta);
         }
     }
 
@@ -42,12 +43,29 @@ class GameManager {
         return this.currentFrame;
     }
 
+    getGameState() {
+        return this.gameState;
+    }
+
     gameOver() {
         this.gameState = Constants.GAME_STATE.OVER;
     }
 
-    getGameState(){
-        return this.gameState;
+    pause() {
+        if (this.gameState !== Constants.GAME_STATE.OVER) {
+            this.isPaused = !this.isPaused;
+            console.log(this.isPaused);
+
+            if (this.isPaused) {
+                this.gameState = Constants.GAME_STATE.PAUSED;
+            } else {
+                this.gameState = Constants.GAME_STATE.RUNNING;
+            }
+        }
+    }
+
+    restart(){
+        location.reload();
     }
 }
 

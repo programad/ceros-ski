@@ -58,10 +58,8 @@ export class Canvas {
         let posY = (this.height/2) - fontSize;
 
         switch (position) {
-            case Constants.TEXT_POSITION.CENTER:
-                
-                break;
-        
+            case Constants.TEXT_POSITION.CENTER:                
+                break;        
             default:
                 break;
         }

@@ -38,8 +38,8 @@ export const SKIER_DIAGONAL_FACTOR = 1.1;
 export const SKIER_JUMP_FACTOR = 1.002;
 
 export const RHINO_STARTING_SPEED = 10.5;
-export const RHINO_STARTING_TIMER = 10;
-export const RHINO_STARTING_DISTANCE = 100;
+export const RHINO_STARTING_TIMER = 100;
+export const RHINO_STARTING_DISTANCE = 120;
 
 export const ASSETS = {
     [SKIER_CRASH]: 'img/skier_crash.png',
@@ -96,7 +96,8 @@ export const KEYS = {
     RIGHT: 39,
     UP: 38,
     DOWN: 40,
-    SPACEBAR: 32
+    SPACEBAR: 32,
+    ENTER: 13
 };
 
 export const GAME_STATE = {

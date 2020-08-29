@@ -41,21 +41,26 @@ export class Game {
     }
 
     updateGameWindow() {
-        gameManager.updateTimer();
-
-        this.skier.update();
+        let gameState = gameManager.getGameState();
 
         const previousGameWindow = this.gameWindow;
         this.calculateGameWindow();
 
-        this.obstacleManager.placeNewObstacle(this.gameWindow, previousGameWindow);
+        if (gameState != Constants.GAME_STATE.PAUSED) {
+            gameManager.updateTimer();
 
-        this.skier.checkIfSkierHitObstacle(this.obstacleManager, this.assetManager);
+            this.skier.update();
 
-        this.checkRhinoSpawn();
-        if (this.rhino) {
-            this.rhino.update();
-            this.rhino.checkIfSkierHitObstacle(this.obstacleManager, this.assetManager);
+            this.obstacleManager.placeNewObstacle(this.gameWindow, previousGameWindow);
+
+            this.skier.checkIfSkierHitObstacle(this.obstacleManager, this.assetManager);
+
+            this.checkRhinoSpawn();
+            if (this.rhino) {
+                this.rhino.update();
+                this.rhino.checkIfSkierHitObstacle(this.obstacleManager, this.assetManager);
+            }
+
         }
     }
 
@@ -68,12 +73,15 @@ export class Game {
             this.rhino.draw(this.canvas, this.assetManager);
         }
 
-        if (gameState !== Constants.GAME_STATE.OVER) {
+        if (gameState === Constants.GAME_STATE.OVER) {
+            this.uiManager.drawGameOver();
+        } else if (gameState === Constants.GAME_STATE.PAUSED) {
             this.skier.draw(this.canvas, this.assetManager);
             this.obstacleManager.drawObstacles(this.canvas, this.assetManager);
-        }
-        else{
-            this.uiManager.drawGameOver();
+            this.uiManager.drawPaused();
+        }  else {
+            this.skier.draw(this.canvas, this.assetManager);
+            this.obstacleManager.drawObstacles(this.canvas, this.assetManager);
         }
     }
 
@@ -86,27 +94,49 @@ export class Game {
     }
 
     handleKeyDown(event) {
-        switch (event.which) {
-            case Constants.KEYS.LEFT:
-                this.skier.turnLeft();
-                event.preventDefault();
-                break;
-            case Constants.KEYS.RIGHT:
-                this.skier.turnRight();
-                event.preventDefault();
-                break;
-            case Constants.KEYS.UP:
-                this.skier.turnUp();
-                event.preventDefault();
-                break;
-            case Constants.KEYS.DOWN:
-                this.skier.turnDown();
-                event.preventDefault();
-                break;
-            case Constants.KEYS.SPACEBAR:
-                this.skier.jump();
-                event.preventDefault();
-                break;
+        let gameState = gameManager.getGameState();
+
+        if (gameState === Constants.GAME_STATE.RUNNING) {
+            switch (event.which) {
+                case Constants.KEYS.LEFT:
+                    this.skier.turnLeft();
+                    event.preventDefault();
+                    break;
+                case Constants.KEYS.RIGHT:
+                    this.skier.turnRight();
+                    event.preventDefault();
+                    break;
+                case Constants.KEYS.UP:
+                    this.skier.turnUp();
+                    event.preventDefault();
+                    break;
+                case Constants.KEYS.DOWN:
+                    this.skier.turnDown();
+                    event.preventDefault();
+                    break;
+                case Constants.KEYS.SPACEBAR:
+                    this.skier.jump();
+                    event.preventDefault();
+                    break;
+                case Constants.KEYS.ENTER:
+                    gameManager.pause();
+                    event.preventDefault();
+                    break;
+            }
+        } else if (gameState === Constants.GAME_STATE.OVER) {
+            switch (event.which) {
+                case Constants.KEYS.ENTER:
+                    gameManager.restart();
+                    event.preventDefault();
+                    break;
+            }
+        } else {
+            switch (event.which) {
+                case Constants.KEYS.ENTER:
+                    gameManager.pause();
+                    event.preventDefault();
+                    break;
+            }
         }
     }
 
