@@ -1,3 +1,5 @@
+import * as Constants from "../Constants";
+
 export class Canvas {
     x = 0;
     y = 0;
@@ -45,5 +47,28 @@ export class Canvas {
         y -= this.drawOffset.y;
 
         this.ctx.drawImage(image, x, y, width, height);
+    }
+
+    drawText(text, font, color, position){
+        let align = 'center';
+        this.ctx.font = font;
+        let fontSize = parseInt(this.ctx.font);
+
+        let posX = (this.width/2);
+        let posY = (this.height/2) - fontSize;
+
+        switch (position) {
+            case Constants.TEXT_POSITION.CENTER:
+                
+                break;
+        
+            default:
+                break;
+        }
+
+        this.ctx.textAlign = align;
+        this.ctx.fillStyle = color;
+        
+        this.ctx.fillText(text, posX, posY);
     }
 }

@@ -6,6 +6,7 @@ import { ObstacleManager } from '../Entities/Obstacles/ObstacleManager';
 import { Rect } from './Utils';
 import { gameManager } from './GameManager';
 import { Rhino } from '../Entities/Rhino';
+import { UiManager } from "../Core/UiManager";
 
 export class Game {
     gameWindow = null;
@@ -17,6 +18,7 @@ export class Game {
         this.skier = new Skier(0, 0);
         this.rhino = null;
         this.obstacleManager = new ObstacleManager();
+        this.uiManager = new UiManager(this.canvas);
 
         document.addEventListener('keydown', this.handleKeyDown.bind(this));
     }
@@ -69,6 +71,9 @@ export class Game {
         if (gameState !== Constants.GAME_STATE.OVER) {
             this.skier.draw(this.canvas, this.assetManager);
             this.obstacleManager.drawObstacles(this.canvas, this.assetManager);
+        }
+        else{
+            this.uiManager.drawGameOver();
         }
     }
 

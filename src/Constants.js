@@ -37,7 +37,7 @@ export const SKIER_STARTING_SPEED = 10;
 export const SKIER_DIAGONAL_FACTOR = 1.1;
 
 export const RHINO_STARTING_SPEED = 10.5;
-export const RHINO_STARTING_TIMER = 500;
+export const RHINO_STARTING_TIMER = 10;
 export const RHINO_STARTING_DISTANCE = 100;
 
 export const ASSETS = {
@@ -103,3 +103,15 @@ export const GAME_STATE = {
     PAUSED: 1,
     OVER: 2
 };
+
+export const TEXT_POSITION = {
+    CENTER: 0,
+    CENTER_TOP: 1,
+    CENTER_BOTTOM: 2,
+    LEFT: 3,
+    LEFT_TOP: 4,
+    LEFT_BOTTOM: 5,
+    RIGHT: 6,
+    RIGHT_TOP: 7,
+    RIGHT_BOTTOM: 8
+}
