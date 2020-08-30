@@ -1,10 +1,12 @@
 import { UiText } from "../Ui/UiText";
 import * as Constants from '../Constants';
+import { gameManager } from './GameManager';
 
 export class UiManager {
     bigFont = '50px Sans-Serif';
     smallFont = '20px Sans-Serif';
     uiColor = '#567567';
+    accentColor = '#560123';
 
     pauseScreen = [];
     pauseScreenHeight = 0;
@@ -25,6 +27,7 @@ export class UiManager {
         this.canvas = canvas;
         this.gameOverText = new UiText('GAME OVER', this.bigFont, this.uiColor);
         this.pressToRestartMessage = new UiText('press ENTER to restart', this.smallFont, this.uiColor);
+        this.highScoreText = new UiText('HIGHSCORE: 000', this.bigFont, this.accentColor);
         this.pausedText = new UiText('PAUSED', this.bigFont, this.uiColor);
         this.fpsText = new UiText('FPS: 00', this.smallFont, this.uiColor);
         this.scoreText = new UiText('SCORE: 000', this.smallFont, this.uiColor);
@@ -51,7 +54,7 @@ export class UiManager {
         this.pauseScreenHeight = this.calculateScreenHeight(this.pauseScreen);
     }
 
-    drawPauseScreen() {            
+    drawPauseScreen() {
         this.canvas.drawOverlay();
         this.drawScreen(this.pauseScreen, this.pauseScreenHeight, Constants.TEXT_POSITION.CENTER);
     }
@@ -64,6 +67,14 @@ export class UiManager {
     }
 
     drawGameOver() {
+        let alreadyHasHighScore = this.gameOverScreen.filter(uiText => uiText.text.indexOf('HIGH') > -1).length > 0;
+
+        if (gameManager.isNewHighScore() && !alreadyHasHighScore) {
+            this.highScoreText.text = 'HIGHSCORE: ' + gameManager.getHighScore();
+            this.gameOverScreen.push(this.highScoreText);
+            this.gameOverScreenHeight = this.calculateScreenHeight(this.gameOverScreen);
+        }
+
         this.drawScreen(this.gameOverScreen, this.gameOverScreenHeight, Constants.TEXT_POSITION.CENTER);
     }
 
@@ -92,6 +103,10 @@ export class UiManager {
         this.topLeftPanel[1].text = 'SPEED: x' + speedModifier.toFixed(2);
 
         this.topRightPanel[0].text = fps + ' FPS';
+    }
+
+    updateGameOverScreen(highScore) {
+        this.gameOverScreen[2].text = 'HIGHSCORE: ' + highScore;
     }
 
     drawTopLeftPanel() {

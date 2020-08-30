@@ -8,6 +8,7 @@ class GameManager {
     animationFrameDuration = 10;
     fps = 0;
     score = 0;
+    newHighScore = false;
     speedModifier = 1;
 
     constructor() {
@@ -29,15 +30,15 @@ class GameManager {
         }
     }
 
-    getSpeedModifier(){
+    getSpeedModifier() {
         return this.speedModifier;
     }
 
-    increaseSpeedModifier(){
+    increaseSpeedModifier() {
         this.speedModifier *= 1.01;
-    }    
+    }
 
-    getFps(){
+    getFps() {
         return this.fps;
     }
 
@@ -45,8 +46,14 @@ class GameManager {
         return this.currentFrame;
     }
 
-    getScore(){
+    getScore() {
         return this.score;
+    }
+
+    getHighScore() {
+        let storedHighScore = localStorage.getItem('highscore');
+
+        return storedHighScore;
     }
 
     incrementScore() {
@@ -69,8 +76,21 @@ class GameManager {
         return this.gameState;
     }
 
+    isNewHighScore(){
+        return this.newHighScore;
+    }
+
     gameOver() {
         this.gameState = Constants.GAME_STATE.OVER;
+
+        let storedScore = localStorage.getItem('highscore');
+        if (this.score > storedScore) {
+            localStorage.setItem('highscore', this.score);
+            this.newHighScore = true;
+        }
+        else{
+            this.newHighScore = false;
+        }
     }
 
     pause() {
@@ -85,7 +105,7 @@ class GameManager {
         }
     }
 
-    restart(){
+    restart() {
         location.reload();
     }
 }

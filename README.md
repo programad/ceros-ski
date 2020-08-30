@@ -29,8 +29,6 @@ ar [https://ceros-ski.azurewebsites.net](https://ceros-ski.azurewebsites.net)
   For this task, I made the skier do a simple jump when pressing the **SPACE BAR** key. Also, if the skier hits a ramp, it will do an awesome front flip with a little chance of a back flip.
 
   There was some sprites that looked misplaced to me (*skier_jump_2*, *skier_jump_3* and *skier_jump_4*), so I switched places for the animation to look better.
-
-  I also added a Game Manager singleton to control the shared aspects of the game across other classes.
    
 **Building something new**
 
@@ -38,9 +36,10 @@ ar [https://ceros-ski.azurewebsites.net](https://ceros-ski.azurewebsites.net)
   The game now has a angry rhino chasing the player down the mountain. It can run to the left, to the right and downwards. If it catches the player, you are done.
   
 * The rhino appears after a specific amount of time and at a specific distance from the player;
-* The rhino runs faster then the player when both are going downwards but the player goes faster if slides on diagonal, adding some challenge to the game;
+* The rhino runs faster then the player when both are going downwards but the player goes faster if slides on diagonal, adding some challenge to the game forcing the player to move on diagonals to outrun the rhino;
 * The rhino sprites were scaled up to 128px height to bring consistency with the skier being eaten size and to look more scary;
 * The rhino received a new animation to run to the right. It was possible to flip the sprite by code but having a dedicated sprite is more performant;
+* I used the last two frames from the rhino sprites to create a "celebrate" animation.
 
 **Documentation:**
 
@@ -48,7 +47,7 @@ ar [https://ceros-ski.azurewebsites.net](https://ceros-ski.azurewebsites.net)
 
 **Bonus**
 
-Checklist of bonus items:
+Checklist of suggested bonus items:
 
 - [X] Provide a way to reset the game once it's over
 - [X] Provide a way to pause and resume the game
@@ -62,6 +61,10 @@ Checklist of bonus items:
 
 ***The canvas***
 The canvas was centralized to avoid scrollbars;
+
+***Game Manager***
+
+The project received a Game Manager singleton to control global aspects of the game like state, time and score. I put the **HIGHSCORE** mechanism on the game manager itself but In a more structured project would be better to create a **StorageManager** to handle localstorage, sessionstorage and cookie manipulation.
 
 ***UI Manager***
 
@@ -77,6 +80,12 @@ The screen was separated in 9 blocks:
 
 
 The UiManager can handle blocks of information in one of these screen blocks and automatically calculates text position based on text order and block height.
+
+
+***Animation Controller***
+
+The Animation Controller is responsible for controling the characters animation. It receives the animation and a few instructions on how to handle the animation and is good to go. To improve from here, would be nice to get assets ONLY from the Animation Controller, even if the animation has only a single frame for consistency.
+
 
 ***Testing***
 
