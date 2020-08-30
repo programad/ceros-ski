@@ -60,6 +60,7 @@ Checklist of suggested bonus items:
 **Extra thoughts**
 
 ***The canvas***
+
 The canvas was centralized to avoid scrollbars;
 
 ***Game Manager***
