@@ -75,8 +75,6 @@ export class Canvas {
         let posY = (this.height / 2) - (number * (screenHeight / 2));
 
         switch (position) {
-            case Constants.TEXT_POSITION.CENTER:
-                break;
             case Constants.TEXT_POSITION.LEFT_TOP:
                 align = 'left';
                 posX = Constants.CANVAS_PADDING;
@@ -92,6 +90,7 @@ export class Canvas {
                 posX = Constants.CANVAS_PADDING;
                 posY = this.height - (number * fontSize);
                 break;
+            case Constants.TEXT_POSITION.CENTER:
             default:
                 break;
         }

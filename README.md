@@ -77,3 +77,7 @@ The screen was separated in 9 blocks:
 
 
 The UiManager can handle blocks of information in one of these screen blocks and automatically calculates text position based on text order and block height.
+
+***Testing***
+
+I added the package *jest-canvas-mock* to be able to test the HTML5 canvas element.
