@@ -24,7 +24,7 @@ describe('no loop animation controller tests', () => {
     });
 
     test('the animation should be played', () => {
-        animationController.play(longAnimation);
+        animationController.play('animation1', longAnimation);
 
         expect(animationController.playing).not.toBeFalsy();
     });
@@ -36,7 +36,7 @@ describe('no loop animation controller tests', () => {
     });
 
     test('should return the first frame', () => {
-        animationController.play(longAnimation);
+        animationController.play('animation1', longAnimation);
 
         let firstFrame = longAnimation[0];
         let frame = animationController.getCurrentAssetName();
@@ -46,7 +46,7 @@ describe('no loop animation controller tests', () => {
     });
 
     test('should return the second frame', () => {
-        animationController.play(longAnimation);
+        animationController.play('animation1', longAnimation);
 
         gameManager.timer = animationController.animationInterval;
         gameManager.getCurrentFrame = jest.fn();
@@ -62,7 +62,7 @@ describe('no loop animation controller tests', () => {
     });
 
     test('should return the last frame', () => {
-        animationController.play(longAnimation);
+        animationController.play('animation1', longAnimation);
 
         gameManager.timer = animationController.animationInterval;
         animationController.currentFrameIndex = longAnimation.length - 1;
@@ -76,7 +76,7 @@ describe('no loop animation controller tests', () => {
     });
 
     test('should return the single frame', () => {
-        animationController.play(singleFrameAnimation);
+        animationController.play('animation1', singleFrameAnimation);
 
         gameManager.timer = animationController.animationInterval;
         animationController.currentFrameIndex = singleFrameAnimation.length - 1;
@@ -90,7 +90,7 @@ describe('no loop animation controller tests', () => {
     });
 
     test('should return the last frame', () => {
-        animationController.play(longAnimation);
+        animationController.play('animation1', longAnimation);
 
         animationController.currentFrameIndex = longAnimation.length - 1;
         gameManager.timer = animationController.animationInterval;
@@ -107,7 +107,7 @@ describe('no loop animation controller tests', () => {
     });
 
     test('should not return a frame', () => {
-        animationController.play(longAnimation);
+        animationController.play('animation1', longAnimation);
 
         animationController.currentFrameIndex = longAnimation.length;
         animationController.update();
@@ -131,7 +131,7 @@ describe('when looping animations', () => {
         gameManager.getCurrentFrame = jest.fn();
         gameManager.getCurrentFrame.mockReturnValueOnce(1);
 
-        animationController.play(runLeftAnimation, true);
+        animationController.play('animation1', runLeftAnimation, true);
 
         let firstFrame = runLeftAnimation[0];
         let frame = animationController.getCurrentAssetName();
@@ -145,7 +145,7 @@ describe('when looping animations', () => {
         gameManager.getCurrentFrame = jest.fn();
         gameManager.getCurrentFrame.mockReturnValueOnce(2);
 
-        animationController.play(runLeftAnimation, true);
+        animationController.play('animation1', runLeftAnimation, true);
 
         animationController.update();
 

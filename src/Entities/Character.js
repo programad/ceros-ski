@@ -28,14 +28,16 @@ export class Character extends Entity {
         this.direction = direction;
     }
 
+    animate(){
+        this.animationController.update();
+    }
+
     update() {
         if (this.canMove) {
             this.move();
         }
 
-        this.animationController.update();
-
-        this.isJumping = this.animationController.playing;
+        this.animate();
 
         this.updateAsset();
     }

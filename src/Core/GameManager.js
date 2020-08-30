@@ -5,7 +5,7 @@ class GameManager {
     gameState = Constants.GAME_STATE.RUNNING;
     lastCalledTime = performance.now();
     currentFrame = 0;
-    animationFrameDuration = 8;
+    animationFrameDuration = 10;
     fps = 0;
     score = 0;
     speedModifier = 1;

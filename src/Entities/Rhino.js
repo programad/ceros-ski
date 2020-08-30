@@ -9,11 +9,13 @@ export class Rhino extends Character {
     runLeftAnimation = [Constants.RHINO_RUN_LEFT, Constants.RHINO_RUN_LEFT_2];
     runRightAnimation = [Constants.RHINO_RUN_RIGHT, Constants.RHINO_RUN_RIGHT_2];
     eatingAnimation = [Constants.RHINO_LIFT, Constants.RHINO_LIFT_MOUTH_OPEN, Constants.RHINO_LIFT_EAT_1, Constants.RHINO_LIFT_EAT_2, Constants.RHINO_LIFT_EAT_3, Constants.RHINO_LIFT_EAT_4];
+    celebratingAnimation = [Constants.RHINO_LIFT_EAT_3, Constants.RHINO_LIFT_EAT_4];
 
+    defaultAssetName = Constants.RHINO_DEFAULT;
     assetName = Constants.RHINO_DEFAULT;
 
     direction = Constants.CHARACTER_DIRECTIONS.DOWN;
-    speedX  = Constants.RHINO_STARTING_SPEED;
+    speedX = Constants.RHINO_STARTING_SPEED;
     originalSpeedX = Constants.RHINO_STARTING_SPEED;
     speedY = Constants.RHINO_STARTING_SPEED;
     isEating = false;
@@ -26,11 +28,26 @@ export class Rhino extends Character {
 
         this.animationController = new AnimationController(this.name);
 
-        this.animationController.play(this.runLeftAnimation, true);
+        this.animationController.play('runleft', this.runLeftAnimation, true);
     }
 
     updateAsset() {
         this.assetName = this.animationController.getCurrentAssetName();
+
+        if (!this.assetName) {
+            this.assetName = this.defaultAssetName;
+        }
+    }
+
+    animate() {
+        if (gameManager.getGameState() == Constants.GAME_STATE.OVER) {
+            this.isEating = this.animationController.playing && this.animationController.animationName === 'eating';
+            if (!this.isEating) {
+                this.animationController.play('celebrate', this.celebratingAnimation, true);
+            }
+        }
+
+        this.animationController.update();
     }
 
     move() {
@@ -40,8 +57,10 @@ export class Rhino extends Character {
             if (this.x === this.target.x) {
                 this.turnDown();
             } else if (this.target.x < this.x) {
+                this.animationController.play('runleft', this.runLeftAnimation, true);
                 this.turnLeft();
             } else if (this.target.x > this.x) {
+                this.animationController.play('runright', this.runRightAnimation, true);
                 this.turnRight();
             }
 
@@ -52,14 +71,12 @@ export class Rhino extends Character {
     switchDirection() {
         switch (this.direction) {
             case Constants.CHARACTER_DIRECTIONS.LEFT_DOWN:
-                this.animationController.play(this.runLeftAnimation, true);
                 this.moveLeftDown();
                 break;
             case Constants.CHARACTER_DIRECTIONS.DOWN:
                 this.moveDown();
                 break;
             case Constants.CHARACTER_DIRECTIONS.RIGHT_DOWN:
-                this.animationController.play(this.runRightAnimation, true);
                 this.moveRightDown();
                 break;
         }
@@ -76,7 +93,7 @@ export class Rhino extends Character {
 
     moveRightDown() {
         let amountToMoveX = this.setAmountToMove();
-        
+
         if (this.canMove) {
             this.x += amountToMoveX;
             this.y += this.speedY * this.diagonalFactor;
@@ -121,8 +138,8 @@ export class Rhino extends Character {
 
     eat() {
         if (!this.isEating) {
+            this.animationController.play('eating', this.eatingAnimation, false);
             this.isEating = true;
-            this.animationController.play(this.eatingAnimation, false);
 
             this.updateAsset();
         }
@@ -138,10 +155,10 @@ export class Rhino extends Character {
 
             const collision = intersectTwoRects(this.myBounds, targetBounds);
 
-            if (collision) {
+            if (collision && gameManager.getGameState() !== Constants.GAME_STATE.OVER) {
                 this.stop();
                 this.target.stop();
-
+                
                 this.eat();
 
                 gameManager.gameOver();

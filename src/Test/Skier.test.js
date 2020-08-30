@@ -339,7 +339,7 @@ describe("Testing Skier", () => {
 
             skier.flip();
 
-            expect(skier.animationController.play).toHaveBeenCalledWith(skier.backFlipAnimation);
+            expect(skier.animationController.play).toHaveBeenCalledWith('backflip', skier.backFlipAnimation);
         });
     });
 

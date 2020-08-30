@@ -55,11 +55,13 @@ export class Game {
         if (this.gameState != Constants.GAME_STATE.PAUSED) {
             gameManager.updateTimer();
 
-            this.skier.update();
+            if (this.gameState === Constants.GAME_STATE.RUNNING) {
+                this.skier.update();
 
-            this.obstacleManager.placeNewObstacle(this.gameWindow, previousGameWindow);
-
-            this.skier.checkIfSkierHitObstacle(this.obstacleManager, this.assetManager);
+                this.obstacleManager.placeNewObstacle(this.gameWindow, previousGameWindow);
+    
+                this.skier.checkIfSkierHitObstacle(this.obstacleManager, this.assetManager);
+            }
 
             this.checkRhinoSpawn();
             if (this.rhino) {

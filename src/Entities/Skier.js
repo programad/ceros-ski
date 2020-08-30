@@ -10,6 +10,7 @@ export class Skier extends Character {
     frontFlipAnimation = [Constants.SKIER_JUMP_START, Constants.SKIER_JUMP_CLIMAX, Constants.SKIER_JUMP_ROLL, Constants.SKIER_JUMP_ALMOST, Constants.SKIER_JUMP_LANDING];
     backFlipAnimation = [Constants.SKIER_JUMP_START, Constants.SKIER_JUMP_ALMOST, Constants.SKIER_JUMP_ROLL, Constants.SKIER_JUMP_CLIMAX, Constants.SKIER_JUMP_LANDING];
 
+    defaultAssetName = Constants.SKIER_DOWN;
     assetName = Constants.SKIER_DOWN;
 
     direction = Constants.CHARACTER_DIRECTIONS.DOWN;
@@ -31,9 +32,15 @@ export class Skier extends Character {
         } else {
             this.assetName = Constants.SKIER_DIRECTION_ASSET[this.direction];
         }
+        
+        if (!this.assetName) {
+            this.assetName = this.defaultAssetName;
+        }
     }
 
-    move() {        
+    move() {
+        this.isJumping = this.animationController.playing;
+
         this.calculateSpeed();
 
         switch (this.direction) {
@@ -105,7 +112,7 @@ export class Skier extends Character {
 
             if (this.direction !== Constants.CHARACTER_DIRECTIONS.CRASH) {
                 this.isJumping = true;
-                this.animationController.play(this.jumpAnimation);
+                this.animationController.play('jump', this.jumpAnimation);
 
                 this.updateAsset();
             }
@@ -122,9 +129,9 @@ export class Skier extends Character {
 
             let flipChance = this.getFlipChance();
             if (flipChance > 7) {
-                this.animationController.play(this.backFlipAnimation);
+                this.animationController.play('backflip', this.backFlipAnimation);
             } else {
-                this.animationController.play(this.frontFlipAnimation);
+                this.animationController.play('frontflip', this.frontFlipAnimation);
             }
 
             this.updateAsset();
