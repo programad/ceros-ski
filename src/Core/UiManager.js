@@ -70,7 +70,7 @@ export class UiManager {
         let alreadyHasHighScore = this.gameOverScreen.filter(uiText => uiText.text.indexOf('HIGH') > -1).length > 0;
 
         if (gameManager.isNewHighScore() && !alreadyHasHighScore) {
-            this.highScoreText.text = 'HIGHSCORE: ' + gameManager.getHighScore();
+            this.highScoreText.text = 'NEW HIGHSCORE: ' + gameManager.getHighScore();
             this.gameOverScreen.push(this.highScoreText);
             this.gameOverScreenHeight = this.calculateScreenHeight(this.gameOverScreen);
         }
