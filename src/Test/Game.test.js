@@ -1,14 +1,17 @@
 import 'babel-polyfill';
+import * as Constants from '../Constants';
 import * as Mocks from './Mocks';
 import { Game } from '../Core/Game';
 import { gameManager } from '../Core/GameManager'
+import { Rhino } from '../Entities/Rhino';
 
 let canvas, game;
 
 beforeEach(() => {
     canvas = Mocks.CANVAS;
     game = new Game(canvas);
-	game.assetManager = Mocks.ASSET_MANAGER;
+    game.assetManager = Mocks.ASSET_MANAGER;
+    game.uiManager = Mocks.UI_MANAGER;
 });
 
 describe('game initialization', () => {
@@ -51,15 +54,90 @@ describe('game initialization', () => {
             expect(game.assetManager.loadedAssets.length).toBeGreaterThan(0);
         });
     });
+});
 
-    test('should update the game window', () => {
+describe('game update', () => {
 
-        gameManager.updateTimer = jest.fn();
+    beforeEach(() => {
+        game.calculateGameWindow = jest.fn();
+    });
+
+    test('should update the game window without a rhino', () => {
+        game.load().then(() => {
+            game.updateGameWindow();
+
+            expect(gameManager.updateUi).toBeCalled();
+            expect(gameManager.updateTimer).toBeCalled();
+            expect(game.calculateGameWindow).toBeCalled();
+        });
+    });
+
+    test('should update the game window with a rhino', () => {
+        game.rhino = new Rhino(0, 0);
 
         game.load().then(() => {
             game.updateGameWindow();
 
+            expect(gameManager.updateUi).toBeCalled();
+            expect(game.calculateGameWindow).toBeCalled();
             expect(gameManager.updateTimer).toBeCalled();
+        });
+    });
+
+    test('should not update', () => {
+        game.gameState === Constants.GAME_STATE.PAUSED;
+
+        game.load().then(() => {
+            game.updateGameWindow();
+
+            expect(gameManager.updateUi).toBeCalled();
+            expect(game.calculateGameWindow).toBeCalled();
+            expect(gameManager.updateTimer).not.toBeCalled();
+        });
+    });
+
+    test('should update when running', () => {
+        game.gameState === Constants.GAME_STATE.RUNNING;
+
+        game.load().then(() => {
+            game.updateGameWindow();
+
+            expect(gameManager.updateUi).toBeCalled();
+            expect(game.calculateGameWindow).toBeCalled();
+            expect(gameManager.updateTimer).toBeCalled();
+        });
+    });
+});
+
+describe('game drawing', () => {
+    test('should draw the game window', () => {
+        game.drawUi = jest.fn();
+
+        game.load().then(() => {
+            game.drawGameWindow();
+
+            expect(game.drawUi).toBeCalled();
+        });
+    });
+
+    test('should draw the game window with rhino', () => {
+        game.rhino = new Rhino(0, 0);
+        game.rhino.draw = jest.fn();
+
+        game.load().then(() => {
+            game.drawGameWindow();
+
+            expect(game.rhino.draw).toBeCalled();
+        });
+    });
+
+    test('should draw game over', () => {
+        game.gameState === Constants.GAME_STATE.OVER;
+
+        game.load().then(() => {
+            game.drawGameWindow();
+
+            expect(game.uiManager.drawGameOver).toBeCalled();
         });
     });
 });
