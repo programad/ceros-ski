@@ -6,7 +6,7 @@ import * as Mocks from './Mocks';
 
 let canvas, uiManager;
 
-beforeAll(() => {
+beforeEach(() => {
     canvas = Mocks.CANVAS;
     uiManager = new UiManager(canvas);
 });
