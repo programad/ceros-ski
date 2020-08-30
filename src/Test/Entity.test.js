@@ -1,10 +1,14 @@
+import 'babel-polyfill';
+import 'jest-canvas-mock';
+import * as Mocks from "../Test/Mocks";
 import { Entity } from "../Entities/Entity";
 
-let entity, canvas;
+let entity, canvas, assetManager;
 
 beforeEach(() => {
     entity = new Entity(0, 0);
-    canvas = {};
+    canvas = Mocks.CANVAS;
+    assetManager = Mocks.ASSET_MANAGER;
 });
 
 describe('entity tests', () => {
@@ -31,5 +35,13 @@ describe('entity tests', () => {
         expect(result).toBeDefined();
         expect(result.x).toEqual(2);
         expect(result.y).toEqual(4);
+    });
+
+    test('should draw entity', () => {
+        entity.y = 4;
+
+        entity.draw(canvas, assetManager);
+
+        expect(canvas.drawImage).toHaveBeenCalled();
     });
 });

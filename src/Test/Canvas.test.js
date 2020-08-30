@@ -26,7 +26,7 @@ describe('canvas tests', () => {
 
             canvas.clearCanvas();
 
-            expect(canvas.ctx.clearRect).toBeCalled();
+            expect(canvas.ctx.clearRect).toHaveBeenCalled();
         });
 
         test('should set the draw offset', () => {
@@ -43,7 +43,7 @@ describe('canvas tests', () => {
 
             canvas.drawImage('img/skier_crash.png', 0, 0, 30, 40)
 
-            expect(canvas.ctx.drawImage).toBeCalled();
+            expect(canvas.ctx.drawImage).toHaveBeenCalled();
         });
 
         test('should measure a text', () => {
@@ -58,7 +58,7 @@ describe('canvas tests', () => {
             canvas.ctx.fillRect = jest.fn();
             canvas.drawOverlay();
 
-            expect(canvas.ctx.fillRect).toBeCalled();
+            expect(canvas.ctx.fillRect).toHaveBeenCalled();
         });
 
         test('should draw a text on the top left', () => {

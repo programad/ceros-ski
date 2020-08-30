@@ -93,6 +93,10 @@ export class Character extends Entity {
             return intersectTwoRects(this.myBounds, obstacleBounds);
         });
 
+        this.handleCollision(collision);
+    }
+
+    handleCollision(collision){
         if (collision) {
             switch (collision.assetName) {
                 case Constants.RAMP:

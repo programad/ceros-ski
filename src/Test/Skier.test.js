@@ -232,12 +232,92 @@ describe("Testing Skier", () => {
         });
     });
 
-    describe('on update', () => {
+    describe('on moving', () => {
+        beforeAll(() => {
+            skier.x = 0;
+            skier.y = 0;
+        });
+
+        test('the character should move', () => {
+            skier.canMove = true;
+            skier.move = jest.fn();
+
+            skier.update();
+
+            expect(skier.move).toHaveBeenCalled();
+        });
+
+        test('the character should not move', () => {
+            skier.canMove = false;
+            skier.move = jest.fn();
+
+            skier.update();
+
+            expect(skier.move).not.toHaveBeenCalled();
+        });
+
+        test('the character should not move up', () => {
+            skier.canMove = false;
+
+            skier.moveUp();
+
+            expect(skier.x).toEqual(0);
+            expect(skier.y).toEqual(0);
+        });
+
+        test('the character should not move left', () => {
+            skier.canMove = false;
+
+            skier.moveLeft();
+
+            expect(skier.x).toEqual(0);
+            expect(skier.y).toEqual(0);
+        });
+
+        test('the character should not move left down', () => {
+            skier.canMove = false;
+
+            skier.moveLeftDown();
+
+            expect(skier.x).toEqual(0);
+            expect(skier.y).toEqual(0);
+        });
+
+        test('the character should not move down', () => {
+            skier.canMove = false;
+
+            skier.moveDown();
+
+            expect(skier.x).toEqual(0);
+            expect(skier.y).toEqual(0);
+        });
+
+        test('the character should not move right down', () => {
+            skier.canMove = false;
+
+            skier.moveRightDown();
+
+            expect(skier.x).toEqual(0);
+            expect(skier.y).toEqual(0);
+        });
+
+        test('the character should not move right', () => {
+            skier.canMove = false;
+
+            skier.moveRight();
+
+            expect(skier.x).toEqual(0);
+            expect(skier.y).toEqual(0);
+        });
+    });
+
+    describe('on updating asset', () => {
         test('should update to left down asset', () => {
 
             let previousAssetName = skier.assetName;
+            skier.canMove = true;
             skier.direction = Constants.CHARACTER_DIRECTIONS.LEFT_DOWN;
-            skier.move();
+
             skier.update();
             let nextAssetName = skier.assetName;
 
@@ -245,19 +325,19 @@ describe("Testing Skier", () => {
             expect(nextAssetName).toEqual('skierLeftDown');
         });
         test('should keep the down asset', () => {
-
+            skier.canMove = true;
             skier.direction = Constants.CHARACTER_DIRECTIONS.DOWN;
-            skier.move();
+
             skier.update();
             let nextAssetName = skier.assetName;
 
             expect(nextAssetName).toEqual('skierDown');
         });
         test('should update to right down asset', () => {
-
+            skier.canMove = true;
             let previousAssetName = skier.assetName;
             skier.direction = Constants.CHARACTER_DIRECTIONS.RIGHT_DOWN;
-            skier.move();
+
             skier.update();
             let nextAssetName = skier.assetName;
 
@@ -267,18 +347,18 @@ describe("Testing Skier", () => {
     });
 
     describe('on updateAsset', () => {
-        test('should not change asset', () => {     
-            
+        test('should not change asset', () => {
             let oldAssetName = skier.assetName;
             skier.direction = Constants.CHARACTER_DIRECTIONS.DOWN;
+
             skier.updateAsset();
 
             expect(skier.assetName).toEqual(oldAssetName);
         });
-        test('should change asset', () => {     
-            
+        test('should change asset', () => {
             let oldAssetName = skier.assetName;
             skier.direction = Constants.CHARACTER_DIRECTIONS.RIGHT_DOWN;
+
             skier.updateAsset();
 
             expect(skier.assetName).not.toEqual(oldAssetName);
@@ -333,7 +413,7 @@ describe("Testing Skier", () => {
 
         test('should do a backflip', () => {
             skier.animationController.play = jest.fn();
-            
+
             skier.getFlipChance = jest.fn();
             skier.getFlipChance.mockReturnValueOnce(8);
 
@@ -343,39 +423,87 @@ describe("Testing Skier", () => {
         });
     });
 
-    describe('on hitting a ramp', () => {
-        test('should do a flip', () => {
-            skier.flip = jest.fn();
-            
-            skier.handleRampHit();
+    describe('collision tests', () => {
+        describe('on collision', () => {
+            test('should collide', () => {
+                let collision = { assetName: 'test'};
+                skier.handleDefaultHit = jest.fn();
 
-            expect(skier.flip).toHaveBeenCalled();
+                skier.handleCollision(collision);
+
+                expect(skier.handleDefaultHit).toHaveBeenCalled();
+            });
+
+            test('should not collide', () => {
+                skier.handleDefaultHit = jest.fn();
+
+                skier.handleCollision();
+
+                expect(skier.handleDefaultHit).not.toHaveBeenCalled();
+            });
+
+            test('should collide with ramp', () => {
+                let collision = { assetName: Constants.RAMP};
+                skier.handleRampHit = jest.fn();
+
+                skier.handleCollision(collision);
+
+                expect(skier.handleRampHit).toHaveBeenCalled();
+            });
+
+            test('should collide with rock1', () => {
+                let collision = { assetName: Constants.ROCK1};
+                skier.handleRockHit = jest.fn();
+
+                skier.handleCollision(collision);
+
+                expect(skier.handleRockHit).toHaveBeenCalled();
+            });
+
+            test('should collide with rock2', () => {
+                let collision = { assetName: Constants.ROCK2};
+                skier.handleRockHit = jest.fn();
+
+                skier.handleCollision(collision);
+
+                expect(skier.handleRockHit).toHaveBeenCalled();
+            });
         });
-    });
 
-    describe('on hitting a rock', () => {
-        test('should crash', () => {
-            skier.handleDefaultHit = jest.fn();
-            skier.isJumping = false;
-            skier.handleRockHit();
+        describe('on hitting a ramp', () => {
+            test('should do a flip', () => {
+                skier.flip = jest.fn();
 
-            expect(skier.handleDefaultHit).toHaveBeenCalled();
+                skier.handleRampHit();
+
+                expect(skier.flip).toHaveBeenCalled();
+            });
         });
-        test('should not crash', () => {
-            skier.handleDefaultHit = jest.fn();
-            skier.isJumping = true;
-            skier.handleRockHit();
 
-            expect(skier.handleDefaultHit).not.toHaveBeenCalled();
+        describe('on hitting a rock', () => {
+            test('should crash', () => {
+                skier.handleDefaultHit = jest.fn();
+                skier.isJumping = false;
+                skier.handleRockHit();
+
+                expect(skier.handleDefaultHit).toHaveBeenCalled();
+            });
+            test('should not crash', () => {
+                skier.handleDefaultHit = jest.fn();
+                skier.isJumping = true;
+                skier.handleRockHit();
+
+                expect(skier.handleDefaultHit).not.toHaveBeenCalled();
+            });
         });
-    });
 
-    describe('on hitting an obstacle', () => {
-        test('should crash', () => {
-            
-            skier.handleDefaultHit();
+        describe('on hitting an obstacle', () => {
+            test('should crash', () => {
 
-            expect(skier.direction).toEqual(Constants.CHARACTER_DIRECTIONS.CRASH);
+                skier.handleDefaultHit('test');
+
+                expect(skier.direction).toEqual(Constants.CHARACTER_DIRECTIONS.CRASH);
+            });
         });
     });
 });

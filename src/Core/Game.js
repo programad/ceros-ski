@@ -52,7 +52,7 @@ export class Game {
         const previousGameWindow = this.gameWindow;
         this.calculateGameWindow();
 
-        if (this.gameState != Constants.GAME_STATE.PAUSED) {
+        if (this.gameState !== Constants.GAME_STATE.PAUSED) {
             gameManager.updateTimer();
 
             if (this.gameState === Constants.GAME_STATE.RUNNING) {

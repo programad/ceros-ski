@@ -2,11 +2,12 @@ import * as Mocks from './Mocks';
 import { ObstacleManager } from "../Entities/Obstacles/ObstacleManager";
 import { randomInt } from '../Core/Utils';
 
-let obstacleManager;
-
+let obstacleManager, canvas, assetManager;
 
 beforeEach(() => {
     obstacleManager = new ObstacleManager();
+    canvas = Mocks.CANVAS;
+    assetManager = Mocks.ASSET_MANAGER;
 });
 
 describe('obstacle manager tests', () => {
@@ -73,6 +74,32 @@ describe('obstacle manager tests', () => {
             expect(newObstacleArraySize).toBeGreaterThan(obstacleArraySize);
         });
 
+        test('should not place new obstacle on the first gamewindow', () => {
+            let newGameWindow = { left: -1, top: 0, right: 1000, bottom: 1000 }
+
+            obstacleManager.getObstacleChance = jest.fn().mockImplementation(() => 7);
+
+            let obstacleArraySize = obstacleManager.obstacles.length;
+            obstacleManager.placeNewObstacle(newGameWindow);
+            let newObstacleArraySize = obstacleManager.obstacles.length;
+
+            expect(newObstacleArraySize).toEqual(obstacleArraySize);
+            expect(newObstacleArraySize).toEqual(0);
+        });
+
+        test('should not place new obstacle', () => {
+            let newGameWindow = { left: -1, top: 0, right: 1000, bottom: 1000 }
+
+            obstacleManager.getObstacleChance = jest.fn().mockImplementation(() => 7);
+
+            let obstacleArraySize = obstacleManager.obstacles.length;
+            obstacleManager.placeNewObstacle(newGameWindow, Mocks.GAME_WINDOW);
+            let newObstacleArraySize = obstacleManager.obstacles.length;
+
+            expect(newObstacleArraySize).toEqual(obstacleArraySize);
+            expect(newObstacleArraySize).toEqual(0);
+        });
+
         test('should place new obstacle on the left', () => {
             let newGameWindow = { left: -1, top: 0, right: 1000, bottom: 1000 }
 
@@ -126,12 +153,29 @@ describe('obstacle manager tests', () => {
         });
 
         test('should calculate an open position', () => {
-            let openPosition = obstacleManager.calculateOpenPosition(0,0,0,0);
+            let openPosition = obstacleManager.calculateOpenPosition(0, 0, 0, 0);
 
             expect(openPosition).toBeDefined();
             expect(openPosition.x).toBeDefined();
             expect(openPosition.y).toBeDefined();
         });
+
+        test('should return the obstacles', () => {
+            obstacleManager.obstacles = ['test'];
+
+            let obstacles = obstacleManager.getObstacles();
+
+            expect(obstacles).toEqual(['test']);
+        });
     });
 
+    describe('on drawing obstacles', () => {
+        test('should draw obstacles', () => {
+            obstacleManager.obstacles = [{ draw: jest.fn() }];
+
+            obstacleManager.drawObstacles(canvas, assetManager);
+
+            expect(obstacleManager.obstacles[0].draw).toHaveBeenCalled();
+        });
+    });
 });
