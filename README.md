@@ -91,3 +91,8 @@ The Animation Controller is responsible for controling the characters animation.
 ***Testing***
 
 I added the package *jest-canvas-mock* to be able to test the HTML5 canvas element.
+
+Here are the test coverage for the result:
+<p align="center">
+  <img src="docs/cerosskicoverage.jpg" />
+</p>
